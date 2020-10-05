@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Build & debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/home/hathoute/Documents/studies/ENSEEIHT/PIM/.executables/executable",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "preLaunchTask": "debug",
+            "setupCommands": [
+                {
+                    "description": "Autoformatting",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+    ]
+}

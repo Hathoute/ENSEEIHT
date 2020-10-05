@@ -1,0 +1,74 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "make",
+            "command": "gnatmake",
+            "args": [
+                "${file}",
+                "-o",
+                ".executables/executable"
+            ],
+            "problemMatcher": [
+                "$ada"
+            ]
+        },
+        {
+            "label": "make-debug",
+            "command": "gnatmake",
+            "args": [
+                "-gnata",
+                "-g",
+                "${file}",
+                "-o",
+                ".executables/executable"
+            ],
+            "problemMatcher": [
+                "$ada"
+            ]
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "sleep 3; echo 'Executed'; ./.executables/executable",
+            "problemMatcher": []
+        },
+        {
+            "label": "clean",
+            "isBackground": true,
+            "command": "bash",
+            "args": [
+                "-c",
+                "sleep 3; rm *.ali; rm *.o"
+            ]
+        },
+        {
+            "label": "clean-debug",
+            "isBackground": true,
+            "command": "bash",
+            "args": [
+                "-c",
+                "sleep 5; rm *.ali; rm *.o; rm b~*.*"
+            ]
+        },
+        {
+            "label": "build",
+            "dependsOn": [
+                "make",
+                "clean",
+                "run"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "debug",
+            "dependsOn": [
+                "make-debug",
+                "clean-debug"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}
