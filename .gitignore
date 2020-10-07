@@ -10,3 +10,6 @@
 # Generated executables
 .executables/*
 */.executables/*
+
+# Test file for custom code
+PIM/tests.adb

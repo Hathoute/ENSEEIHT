@@ -1,4 +1,5 @@
 -- Score PIXAL le 05/10/2020 à 18:21 : 92%
+-- Score PIXAL le 07/10/2020 à 15:36 : 100%
 
 with Ada.Text_IO;          use Ada.Text_IO;
 with Ada.Integer_Text_IO;  use Ada.Integer_Text_IO;
@@ -80,13 +81,21 @@ begin
 	Get (Un_Entier);
 
 	-- Afficher la puissance en version itérative
-	Put ("Puissance (itérative) : ");
-	Put (Puissance_Iteratif (Un_Reel, Un_Entier), Fore => 0, Exp => 0,  Aft => 4);
-	New_Line;
+	if Un_Entier >= 0 or Un_Reel /= 0.0 then
+		Put ("Puissance (itérative) : ");
+		Put (Puissance_Iteratif (Un_Reel, Un_Entier), Fore => 0, Exp => 0,  Aft => 4);
+		New_Line;
+	else
+		Put_Line("Division par zéro");
+	end if;
 
 	-- Afficher la puissance en version récursive
-	Put ("Puissance (récursive) : ");
-	Put (Puissance_Recursif (Un_Reel, Un_Entier), Fore => 0, Exp => 0,  Aft => 4);
-	New_Line;
+	if Un_Entier >= 0 or Un_Reel /= 0.0 then
+		Put ("Puissance (récursive) : ");
+		Put (Puissance_Recursif (Un_Reel, Un_Entier), Fore => 0, Exp => 0,  Aft => 4);
+		New_Line;
+	else
+		Put_Line("Division par zéro");
+	end if;
 
 end Ecrire_Entier;
