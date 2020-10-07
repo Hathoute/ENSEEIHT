@@ -1,3 +1,5 @@
+-- Score PIXAL le 07/10/2020 à 17:04 : 100%
+
 with Ada.Text_IO;             use Ada.Text_IO;
 with Ada.Integer_Text_IO;     use Ada.Integer_Text_IO;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
@@ -79,14 +81,19 @@ procedure Robot_Type_1 is
 	-- Faire avancer le robot d'une case suivant sa direction courante.
 	procedure Avancer (Robot : in out T_Robot) is
 	begin
-		null;	-- TODO: à remplacer
+		case Robot.Direction is
+			when NORD => Robot.Ordonnee := Robot.Ordonnee + 1;
+			when SUD => Robot.Ordonnee := Robot.Ordonnee - 1;
+			when EST => Robot.Abscisse := Robot.Abscisse + 1;
+			when OUEST => Robot.Abscisse := Robot.Abscisse - 1;
+		end case;
 	end Avancer;
 
 
 	-- Faire pivoter le robot dans le sens NORD, EST, SUD, OUEST
 	procedure Pivoter (Robot : in out T_Robot) is
 	begin
-		null;	-- TODO: à remplacer
+		Robot.Direction := T_Direction'Val((T_Direction'Pos(Robot.Direction) + 1) mod 4);
 	end Pivoter;
 
 
@@ -146,8 +153,14 @@ procedure Robot_Type_1 is
 	-- Faire avancer le robot jusqu'à un obstacle ou aux limites de
 	-- l'environnement.
 	procedure Foncer(Robot : in out T_Robot; Environnement : in T_Environnement) is
+		Ancien_X, Ancien_Y: Integer;
 	begin
-		null; -- TODO: à remplacer
+		loop
+			Ancien_X := Robot.Abscisse;
+			Ancien_Y := Robot.Ordonnee;
+		   	Avancer(Robot, Environnement);
+			exit when Ancien_X = Robot.Abscisse and Ancien_Y = Robot.Ordonnee;
+		end loop;
 	end Foncer;
 
 --| Sous-programmes qui manipulent les sous-programmes précédents |---------
@@ -238,5 +251,14 @@ begin
     -- QUESTIONS
     -- 1:   a: Elles ont été déclarés dans cet ordre pour simplifier l'affectation
     --          ex: NORD+1 = EST qui est bien un pivotage de 90deg.
-
+	-- 1:	b: L'utilisateur saisie une direction en ecrivant son nom
+	-- 1:	c: La procédure Get_Direction n'est pas robuste car si l'utilisateur entre une direction
+	--			inconnue, la fonction jete un erreur.
+	-- 1:	d: Oui, car Get n'a pas de signature identique à Get_Direction 
+	--			(vu que T_Direction est definie par l'utilisateur).
+	--
+	-- 3:	a: T_Case admet deux valeurs (LIBRE, OCCUPE), Boolean admet aussi deux valeurs (True, False)
+	--			donc on peux prendre le type Boolean au lieu de T_Case. (mais si Case = True, on veut dire quoi?)
+	-- 3:	b: DX et DY correspondent aux changements de position en relation avec la Direction
+	--			ex: DX(NORD) = 0 car en direction nord on ne fait pas de déplacements sur l'axe X
 end Robot_Type_1;
