@@ -13,3 +13,9 @@
 
 # Test file for custom code
 PIM/tests.adb
+
+# Eliminer les td/tp non faits
+PIM/t[pd]*
+
+# Eliminer le svn.
+PIM/.svn
