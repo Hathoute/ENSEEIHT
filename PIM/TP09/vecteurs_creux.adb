@@ -17,8 +17,13 @@ package body Vecteurs_Creux is
 
 
 	procedure Detruire (V: in out T_Vecteur_Creux) is
+		T: T_Vecteur_Creux;
 	begin
-		Free(V);
+		while V /= Null loop
+			T := V.all.Suivant;
+			Free(V);
+			V := T;
+		end loop;
 	end Detruire;
 
 
@@ -64,7 +69,18 @@ package body Vecteurs_Creux is
 		Temp: T_Vecteur_Creux;
 	begin
 
-		if Est_Nul(V) then
+		if Valeur = 0.0 then
+		   -- Chercher la cellule d'indice Indice et la supprimer;
+			if not Est_Nul(V) then
+			   	if V.all.Indice = Indice then
+				   	Temp := V;
+					V := V.all.Suivant;
+					Free(Temp);
+				elsif V.all.Indice < Indice then
+				   	Modifier(V.all.Suivant, Indice, Valeur);
+				end if;
+			end if;
+		elsif Est_Nul(V) then
 		   	V := new T_Cellule;
 			V.all.Indice := Indice;
 			V.all.Valeur := Valeur;
@@ -138,9 +154,21 @@ package body Vecteurs_Creux is
 				Precedent := Temp1;
 				Temp1 := Temp1.all.Suivant;
 			elsif Temp1.all.Indice = Temp2.all.Indice then
-				Temp1.all.Valeur := Temp1.all.Valeur + Temp2.all.Valeur;
-				Precedent := Temp1;
-				Temp1 := Temp1.all.Suivant;
+				if Temp1.all.Valeur + Temp2.all.Valeur = 0.0 then
+					-- Enlever la cellule de cet indice
+					Modifier(Temp1, Temp1.all.Indice, 0.0);
+
+					if not Est_Nul(Precedent) then
+					   	Precedent.all.Suivant := Temp1;
+					else
+						V1 := V1.all.Suivant;
+					end if;
+				else
+					Temp1.all.Valeur := Temp1.all.Valeur + Temp2.all.Valeur;
+					Precedent := Temp1;
+					Temp1 := Temp1.all.Suivant;
+				end if;
+				
 				Temp2 := Temp2.all.Suivant;
 			else
 				Modifier(Temp1, Temp2.all.Indice, Temp2.all.Valeur);			-- O(1) !

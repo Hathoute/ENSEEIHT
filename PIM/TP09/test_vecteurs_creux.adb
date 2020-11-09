@@ -293,14 +293,14 @@ procedure Test_Vecteurs_Creux is
 
 
 begin
-	-- Tester_Nul;
-	-- Tester_Norme2;
-	-- Tester_Composante (Composante_Recursif'Access);
-	-- Tester_Composante (Composante_Iteratif'Access);
-	-- Tester_Modifier;
+	Tester_Nul;
+	Tester_Norme2;
+	Tester_Composante (Composante_Recursif'Access);
+	Tester_Composante (Composante_Iteratif'Access);
+	Tester_Modifier;
 	Tester_Sont_Egaux_Recursif;
 	Tester_Sont_Egaux_Iteratif;
-	-- Tester_Produit_Scalaire;
-	-- Tester_Additionner_Partage;
+	Tester_Produit_Scalaire;
+	Tester_Additionner_Partage;
 	Tester_Additionner;
 end Test_Vecteurs_Creux;
