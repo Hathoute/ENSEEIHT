@@ -30,13 +30,31 @@ package body Vecteurs_Creux is
 
 	function Composante_Recursif (V : in T_Vecteur_Creux ; Indice : in Integer) return Float is
 	begin
-		return 0.0;	-- TODO : à changer
+		if Est_Nul(V) then
+			return 0.0;
+		else
+			if Indice = V.all.Indice then
+			   	return V.all.Valeur;
+			else
+				return Composante_Recursif(V.all.Suivant, Indice);
+			end if;
+		end if;
 	end Composante_Recursif;
 
 
 	function Composante_Iteratif (V : in T_Vecteur_Creux ; Indice : in Integer) return Float is
+		Current: T_Vecteur_Creux;
 	begin
-		return 0.0;	-- TODO : à changer
+		Current := V;
+		while Not Est_Nul(Current) loop
+		   	if Current.all.Indice = Indice then
+				return Current.all.Valeur;
+			else
+				Current := Current.all.Suivant;
+			end if;
+		end loop;
+
+		return 0.0;
 	end Composante_Iteratif;
 
 

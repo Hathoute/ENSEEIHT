@@ -19,5 +19,8 @@ begin
 
 	Detruire(V);
 
+	pragma Assert(Composante_Recursif(V, 18) = 0.0);
+	pragma Assert(Composante_Iteratif(V, 18) = 0.0);
+
 	Put_Line ("Fin du scénario");
 end Exemple_Vecteurs_Creux;
