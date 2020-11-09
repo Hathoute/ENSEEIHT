@@ -46,7 +46,7 @@ package body Vecteurs_Creux is
 		Current: T_Vecteur_Creux;
 	begin
 		Current := V;
-		while Not Est_Nul(Current) loop
+		while Not Est_Nul(Current) and Current.all.Indice <= Indice loop
 		   	if Current.all.Indice = Indice then
 				return Current.all.Valeur;
 			else
