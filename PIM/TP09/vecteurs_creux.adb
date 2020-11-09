@@ -1,4 +1,4 @@
-with Ada.Text_IO;                 use Ada.Text_IO;
+"with Ada.Text_IO;                 use Ada.Text_IO;
 with Ada.Integer_Text_IO;         use Ada.Integer_Text_IO;
 with Ada.Float_Text_IO;           use Ada.Float_Text_IO;
 with Ada.Unchecked_Deallocation;
@@ -46,7 +46,7 @@ package body Vecteurs_Creux is
 		Current: T_Vecteur_Creux;
 	begin
 		Current := V;
-		while Not Est_Nul(Current) and Current.all.Indice <= Indice loop
+		while Not Est_Nul(Current) and then Current.all.Indice <= Indice loop
 		   	if Current.all.Indice = Indice then
 				return Current.all.Valeur;
 			else
@@ -61,8 +61,33 @@ package body Vecteurs_Creux is
 	procedure Modifier (V : in out T_Vecteur_Creux ;
 				       Indice : in Integer ;
 					   Valeur : in Float ) is
+		Temp: T_Vecteur_Creux;
 	begin
-		Null;	-- TODO : à changer
+
+		if Est_Nul(V) then
+		   	V := new T_Cellule;
+			V.all.Indice := Indice;
+			V.all.Valeur := Valeur;
+		else
+			if V.all.Indice < Indice then
+				if Est_Nul(V.all.Suivant) then
+				   	Temp := new T_Cellule;
+					Temp.all.Indice := Indice;
+					Temp.all.Valeur := Valeur;
+					V.all.Suivant := Temp;
+				else
+					Modifier(V.all.Suivant, Indice, Valeur);
+				end if;
+			elsif V.all.Indice = Indice then
+			   V.all.Valeur := Valeur;
+			else
+				Temp := V;
+				V := new T_Cellule;
+				V.all.Indice := Indice;
+				V.all.Valeur := Valeur;
+				V.all.Suivant := Temp;
+			end if;
+		end if;
 	end Modifier;
 
 

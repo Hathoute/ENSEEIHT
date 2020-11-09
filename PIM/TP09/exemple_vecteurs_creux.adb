@@ -22,5 +22,15 @@ begin
 	pragma Assert(Composante_Recursif(V, 18) = 0.0);
 	pragma Assert(Composante_Iteratif(V, 18) = 0.0);
 
+	Modifier(V, 18, 1.0);
+	Modifier(V, 2, 3.0);
+	Modifier(V, 5, 11.0);
+
+	Afficher(V);
+
+	pragma Assert(Composante_Recursif(V, 18) = 1.0);
+	pragma Assert(Composante_Iteratif(V, 2) = 3.0);
+
+
 	Put_Line ("Fin du scénario");
 end Exemple_Vecteurs_Creux;
