@@ -302,5 +302,5 @@ begin
 	Tester_Sont_Egaux_Iteratif;
 	-- Tester_Produit_Scalaire;
 	-- Tester_Additionner_Partage;
-	-- Tester_Additionner;
+	Tester_Additionner;
 end Test_Vecteurs_Creux;

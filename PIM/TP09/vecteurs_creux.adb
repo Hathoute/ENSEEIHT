@@ -81,8 +81,10 @@ package body Vecteurs_Creux is
 			elsif V.all.Indice = Indice then
 			   V.all.Valeur := Valeur;
 			else
-				Temp := V;
-				V := new T_Cellule;
+				Temp := new T_Cellule;
+				Temp.all.Indice := V.all.Indice;
+				Temp.all.Valeur := V.all.Valeur;
+				Temp.all.Suivant := V.all.Suivant;
 				V.all.Indice := Indice;
 				V.all.Valeur := Valeur;
 				V.all.Suivant := Temp;
@@ -124,8 +126,43 @@ package body Vecteurs_Creux is
 
 
 	procedure Additionner (V1 : in out T_Vecteur_Creux; V2 : in T_Vecteur_Creux) is
+		Temp1: T_Vecteur_Creux;
+		Temp2: T_Vecteur_Creux;
+		Precedent: T_Vecteur_Creux;
 	begin
-		Null;	-- TODO : à changer
+
+		Temp1 := V1;
+		Temp2 := V2;
+		while not Est_Nul(Temp1) and not Est_Nul(Temp2) loop
+			if Temp1.all.Indice < Temp2.all.Indice then
+				Precedent := Temp1;
+				Temp1 := Temp1.all.Suivant;
+			elsif Temp1.all.Indice = Temp2.all.Indice then
+				Temp1.all.Valeur := Temp1.all.Valeur + Temp2.all.Valeur;
+				Precedent := Temp1;
+				Temp1 := Temp1.all.Suivant;
+				Temp2 := Temp2.all.Suivant;
+			else
+				Modifier(Temp1, Temp2.all.Indice, Temp2.all.Valeur);			-- O(1) !
+				Temp2 := Temp2.all.Suivant;
+			end if;
+		end loop;
+
+
+		while not Est_Nul(Temp2) loop
+			if Est_Nul(V1) then
+				V1 := new T_Cellule;
+				V1.all.Indice := Temp2.all.Indice;
+				V1.all.Valeur := Temp2.all.Valeur;
+				Precedent := V1;
+				Temp2 := Temp2.Suivant;
+			else
+				Modifier(Precedent, Temp2.all.Indice, Temp2.all.Valeur);			-- O(1) !
+				Precedent := Precedent.all.Suivant;
+				Temp2 := Temp2.all.Suivant;
+			end if;
+		end loop;
+
 	end Additionner;
 
 
