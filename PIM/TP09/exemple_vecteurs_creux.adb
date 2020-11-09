@@ -9,6 +9,10 @@ procedure Exemple_Vecteurs_Creux is
 	Epsilon: constant Float := 1.0e-5;
 begin
 	Put_Line ("Début du scénario");
-	-- TODO : à compléter
+	
+	-- Initialiser V ne marchera pas car on n'a encore modifié Est_Nul.
+	Initialiser(V);
+	Afficher(V);
+
 	Put_Line ("Fin du scénario");
 end Exemple_Vecteurs_Creux;

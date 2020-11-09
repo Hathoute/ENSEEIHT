@@ -12,7 +12,7 @@ package body Vecteurs_Creux is
 
 	procedure Initialiser (V : out T_Vecteur_Creux) is
 	begin
-		Null;	-- TODO : à changer
+		V := Null;
 	end Initialiser;
 
 
