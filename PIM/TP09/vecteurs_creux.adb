@@ -1,4 +1,4 @@
-"with Ada.Text_IO;                 use Ada.Text_IO;
+with Ada.Text_IO;                 use Ada.Text_IO;
 with Ada.Integer_Text_IO;         use Ada.Integer_Text_IO;
 with Ada.Float_Text_IO;           use Ada.Float_Text_IO;
 with Ada.Unchecked_Deallocation;
@@ -93,13 +93,33 @@ package body Vecteurs_Creux is
 
 	function Sont_Egaux_Recursif (V1, V2 : in T_Vecteur_Creux) return Boolean is
 	begin
-		return False;	-- TODO : à changer
+		if Est_Nul(V1) and Est_Nul(V2) then
+		   	return True;
+		elsif not Est_Nul(V1) and then not Est_Nul(V2) then
+		   	return Sont_Egaux_Recursif(V1.all.Suivant, V2.all.Suivant);
+		end if;
+
+		return False;
 	end Sont_Egaux_Recursif;
 
 
 	function Sont_Egaux_Iteratif (V1, V2 : in T_Vecteur_Creux) return Boolean is
+		Temp1: T_Vecteur_Creux;
+		Temp2: T_Vecteur_Creux;
 	begin
-		return False;	-- TODO : à changer
+		Temp1 := V1;
+		Temp2 := V2;
+
+		while not Est_Nul(Temp1) and then not Est_Nul(Temp2) loop
+			if not (Temp1.all.Indice = Temp2.all.Indice and Temp1.all.Valeur = Temp2.all.Valeur) then
+			   	Temp1 := Null;
+			else
+				Temp1 := Temp1.all.Suivant;
+				Temp2 := Temp2.all.Suivant;
+			end if;
+		end loop;
+
+		return Est_Nul(Temp1) and Est_Nul(Temp2);
 	end Sont_Egaux_Iteratif;
 
 
