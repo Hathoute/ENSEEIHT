@@ -9,7 +9,7 @@
             "args": [
                 "${file}",
                 "-o",
-                ".executables/executable"
+                "${workspaceFolder}/PIM/.executables/executable"
             ],
             "problemMatcher": [
                 "$ada"
@@ -23,7 +23,7 @@
                 "-g",
                 "${file}",
                 "-o",
-                ".executables/executable"
+                "${workspaceFolder}/PIM/.executables/executable"
             ],
             "problemMatcher": [
                 "$ada"
@@ -32,26 +32,20 @@
         {
             "label": "run",
             "type": "shell",
-            "command": "sleep 3; echo 'Executed'; ./.executables/executable",
+            "command": "sleep 3; echo 'Executed'; ${workspaceFolder}/PIM/.executables/executable",
             "problemMatcher": []
         },
         {
             "label": "clean",
             "isBackground": true,
-            "command": "bash",
-            "args": [
-                "-c",
-                "sleep 3; rm *.ali; rm *.o"
-            ]
+            "type": "shell",
+            "command": "sleep 3; rm *.ali; rm *.o"
         },
         {
             "label": "clean-debug",
             "isBackground": true,
-            "command": "bash",
-            "args": [
-                "-c",
-                "sleep 5; rm *.ali; rm *.o; rm b~*.*"
-            ]
+            "type": "shell",
+            "command": "sleep 5; rm *.ali; rm *.o; rm b~*.*"
         },
         {
             "label": "build",
