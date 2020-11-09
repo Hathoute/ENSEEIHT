@@ -16,5 +16,8 @@ begin
 	New_Line;
 
 	pragma Assert(Est_Nul(V) = True);
+
+	Detruire(V);
+
 	Put_Line ("Fin du scénario");
 end Exemple_Vecteurs_Creux;

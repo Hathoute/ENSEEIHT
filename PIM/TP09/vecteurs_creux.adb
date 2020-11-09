@@ -18,7 +18,7 @@ package body Vecteurs_Creux is
 
 	procedure Detruire (V: in out T_Vecteur_Creux) is
 	begin
-		Null;	-- TODO : à changer
+Ajou		Free(V);
 	end Detruire;
 
 
