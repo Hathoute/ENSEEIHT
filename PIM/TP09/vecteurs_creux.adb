@@ -167,14 +167,43 @@ package body Vecteurs_Creux is
 
 
 	function Norme2 (V : in T_Vecteur_Creux) return Float is
+		Somme: Float;
+		Cellule: T_Vecteur_Creux;
 	begin
-		return 0.0;	-- TODO : à changer
+		Cellule := V;
+		Somme := 0.0;
+
+		while not Est_Nul(Cellule) loop
+		   	Somme := Somme + Cellule.all.Valeur * Cellule.all.Valeur;
+			Cellule := Cellule.all.Suivant;
+		end loop;
+
+		return Somme;
 	end Norme2;
 
 
 	Function Produit_Scalaire (V1, V2: in T_Vecteur_Creux) return Float is
+		Temp1: T_Vecteur_Creux;
+		Temp2: T_Vecteur_Creux;
+		Produit: Float;
 	begin
-		return 0.0;	-- TODO : à changer
+		Temp1 := V1;
+		Temp2 := V2;
+		Produit := 0.0;
+
+		while not (Est_Nul(Temp1) or Est_Nul(Temp2)) loop
+		   	if Temp1.all.Indice < Temp2.all.Indice then
+			   	Temp1 := Temp1.all.Suivant;
+		   	elsif Temp1.all.Indice > Temp2.all.Indice then
+			   	Temp2 := Temp2.all.Suivant;
+			else
+				Produit := Produit + Temp1.all.Valeur * Temp2.all.Valeur;
+				Temp1 := Temp1.all.Suivant;
+				Temp2 := Temp2.all.Suivant;
+			end if;
+		end loop;
+
+		return Produit;
 	end Produit_Scalaire;
 
 
