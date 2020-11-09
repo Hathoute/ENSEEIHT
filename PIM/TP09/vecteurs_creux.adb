@@ -24,7 +24,7 @@ package body Vecteurs_Creux is
 
 	function Est_Nul (V : in T_Vecteur_Creux) return Boolean is
 	begin
-		return False;	-- TODO : à changer
+		return V = Null;
 	end Est_Nul;
 
 

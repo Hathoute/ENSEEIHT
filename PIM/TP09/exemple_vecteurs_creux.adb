@@ -13,6 +13,8 @@ begin
 	-- Initialiser V ne marchera pas car on n'a encore modifié Est_Nul.
 	Initialiser(V);
 	Afficher(V);
+	New_Line;
 
+	pragma Assert(Est_Nul(V) = True);
 	Put_Line ("Fin du scénario");
 end Exemple_Vecteurs_Creux;
