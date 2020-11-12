@@ -6,7 +6,7 @@ function [beta, norm_grad_f_beta, f_beta, norm_delta, nb_it, exitflag] ...
 % UniversitÃ© de Toulouse, INP-ENSEEIHT                      *
 %************************************************************
 %
-% Newton résout par l'algorithme de Newton les problemes aux moindres carres
+% Newton rï¿½sout par l'algorithme de Newton les problemes aux moindres carres
 % Min 0.5||r(beta)||^2
 % beta \in R^p
 %
@@ -58,7 +58,7 @@ function [beta, norm_grad_f_beta, f_beta, norm_delta, nb_it, exitflag] ...
     
     while 1
         beta_anc = beta;
-        beta = beta_anc - (hess + jacob'*jacob)\jacob'*residu;
+        beta = beta_anc - hess\jacob'*residu;
         [hess, residu, jacob] = Hess_f_C14(beta);
         norm_grad_f_beta = norm(jacob'*residu);
         nb_it = nb_it + 1;
