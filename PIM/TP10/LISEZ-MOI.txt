@@ -33,24 +33,41 @@ Inconvenients:  Compléxité grande lors de plusieurs opérations (Taille, Vider
 
 Indiquer ici les résultats obtenus.
 
-...
+Pour LCA:
+    Borne  : 100
+    Taille : 1000000
+    Min : 9800
+    Max : 10232
 
+    real    0m1.233s
+    user    0m1.229s
+    sys     0m0.004s
+
+Pour TH:
+    Borne  : 100
+    Taille : 1000000
+    Min : 9756
+    Max : 10214
+
+    real    0m0.144s
+    user    0m0.141s
+    sys     0m0.004s
 
 ## Qualité du générateur aléatoire
 
 Indiquer les conclusions quant à la qualité du générateur aléatoire.
 
-...
-
-
+On observe bien que le min est proche du max pour des valeurs Borne/Taille suffisament
+adaptés pour former un opinion. Par exemple tout en haut, on trouve Max-Min = 458 << Taille.
+Le générateur aléatoire est donc un bon générateur.
 
 # Principales difficultés rencontrées
 
 Indiquer ici les principales difficultés rencontrées lors de la réalisation de
 ce projet et comment elles ont été surmontées ou contournéeS.
 
-...
-
+Avoir mal à retenir la syntaxe de la Genericité.
+Solution: Voir le manuel (learn.adacore.com)
 
 
 # Informations complémentaires
@@ -68,5 +85,8 @@ Cette partie peut être vide.
 
 Quel bilan personnel tirez vous de ce mini-projet ?
 
-...
+Il n'existe pas qu'une unique façon de resoudre un problème donné.
+Avant d'utiliser une structure de donnée (associative), on devrai analyser
+le problème et voir si cette structure est vraiment optimale niveau 
+simplicité+Compléxité pour ce problème là.
 
