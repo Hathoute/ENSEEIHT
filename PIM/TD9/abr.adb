@@ -1,4 +1,6 @@
-with SDA_Exceptions;         use SDA_Exceptions;
+with SDA_Exceptions;        use SDA_Exceptions;
+with Ada.Strings.Fixed;  	use Ada.Strings.Fixed;
+with Ada.Text_IO;           use Ada.Text_IO;
 with Ada.Unchecked_Deallocation;
 
 package body ABR is
@@ -128,25 +130,28 @@ package body ABR is
 		Pour_Chaque(Sda.all.Sous_Arbre_Droit);
 	end Pour_Chaque;
 
---	procedure Affichage_Indente(Sda: in T_ABR; Niv: in Integer) is
---	begin
---		if Est_Vide(Sda) then
---		   	Put("[]", Niv);
---		else
---			Put("", Niv);
---			Afficher(Sda.all.Cle, Sda.all.Donnee);
---			Put("Gauche -> ", Niv);
---			Affichage_Indente(Sda.all.Sous_Arbre_Gauche, Niv+1);
---			Put("Droit -> ", Niv);
---			Affichage_Indente(Sda.all.Sous_Arbre_Droit, Niv+1);
---		end if;
---
---		New_Line;
---	end Affichage_Indente;
---
---	procedure Afficher(Sda: in T_ABR) is
---	begin
---		Affichage_Indente(Sda, 0);
---	end Afficher_Arbre;
+	procedure Indentate_Put(To_Put: in String; Niv: in Integer) is
+	begin
+		Put((Niv*4)*" ");
+		Put(To_Put);
+	end Indentate_Put;
+
+	procedure Afficher_SDA(Sda: in T_ABR; Niv: in Integer := 1) is
+	begin
+		if Est_Vide(Sda) then
+			Put("[]");
+		else
+			Put_Line("[");
+			Indentate_Put("", Niv);
+			Afficher_Couple(Sda.all.Cle, Sda.all.Donnee);
+			Indentate_Put("Gauche -> ", Niv);
+			Afficher_SDA(Sda.all.Sous_Arbre_Gauche, Niv+1);
+			Indentate_Put("Droit -> ", Niv);
+			Afficher_SDA(Sda.all.Sous_Arbre_Droit, Niv+1);
+			Indentate_Put("]", Niv-1);
+		end if;
+
+		New_Line;
+	end Afficher_SDA;
 
 end ABR;

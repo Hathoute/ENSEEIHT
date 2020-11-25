@@ -48,17 +48,21 @@ procedure Test_ABR is
 
 
 	-- Afficher une Unbounded_String et un entier.
-	procedure Afficher (S : in Unbounded_String; N: in Integer) is
+	procedure Afficher_S (S : in Unbounded_String; N: in Integer) is
 	begin
 		Put (Avec_Guillemets (S));
 		Put (" : ");
 		Put (N, 1);
 		New_Line;
-	end Afficher;
+	end Afficher_S;
+
+	-- Afficher la Sda.
+	procedure Afficher_Old is
+		new Pour_Chaque (Afficher_S);
 
 	-- Afficher la Sda.
 	procedure Afficher is
-		new Pour_Chaque (Afficher);
+		new Afficher_SDA (Afficher_S);
 
 
 	Nb_Cles : constant Integer := 17;

@@ -55,6 +55,11 @@ package ABR is
 		with procedure Traiter (Cle : in T_Cle; Donnee: in T_Donnee);
 	procedure Pour_Chaque (Sda : in T_ABR);
 
+	-- Afficher l'arbre.
+	generic
+		with procedure Afficher_Couple (Cle : in T_Cle; Donnee: in T_Donnee);
+	procedure Afficher_SDA (Sda: in T_ABR; Niv: in Integer := 1);
+
 
 private
 
