@@ -1,6 +1,6 @@
 % Compte-rendu minimal du mini-projet SDA : LCA et TH
-% Auteur : NOM Prénom
-% Groupe de TP : ...
+% Auteur : HATHOUTE Hamza
+% Groupe de TP : Groupe-H
 
 
 **Consigne :** Vous devez écrire vos réponse à la place des ... en laissant
@@ -21,7 +21,9 @@ pandoc --toc -N -o LISEZ-MOI.pdf LISEZ-MOI.txt
 **Indiquer les inconvénients/avantages d'une implantation par listes chaînées
 d'une SDA.**
 
-...
+Avantages:      Flexibilité, c'est à dire qu'on ne dispose pas de contrainte quand à la taille de cette liste.
+Inconvenients:  Compléxité grande lors de plusieurs opérations (Taille, Vider, Supprimer, Cle_Presente) O(n) 
+                qu'on peut optimiser à O(1) pour Taille, Vider par exemple et O(logn) pour Supprimer et Cle_Presente.
 
 
 
