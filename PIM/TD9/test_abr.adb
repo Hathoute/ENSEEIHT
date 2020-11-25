@@ -15,8 +15,12 @@ procedure Test_ABR is
 
 	-- Est-ce que la Cle est utilisée dans la Sda
 	function Cle_Presente (Sda : in T_ABR ; Cle : in Unbounded_String) return Boolean is
+		Temp: Integer;
 	begin
-		return False;	-- TODO : à changer
+		Temp := La_Donnee(Sda, Cle);
+		return True;
+	exception
+		when Cle_Absente_Exception => return False;
 	end Cle_Presente;
 
 
