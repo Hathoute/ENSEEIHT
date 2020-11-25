@@ -3,10 +3,14 @@ with Ada.Integer_Text_IO;  use Ada.Integer_Text_IO;
 with Ada.Command_Line;     use Ada.Command_Line;
 with SDA_Exceptions;       use SDA_Exceptions;
 with Alea;
+with LCA;
 
 -- Évaluer la qualité du générateur aléatoire et les SDA.
 procedure Evaluer_Alea_LCA is
 
+	package LCA_int_int is
+        new LCA (T_Cle => Integer, T_Donnee => Integer);
+    use LCA_int_int;
 
 	-- Afficher l'usage.
 	procedure Afficher_Usage is
@@ -68,12 +72,45 @@ procedure Evaluer_Alea_LCA is
 			and 0 <= Max and Max <= Taille
 			and Min + Max <= Taille
 	is
+
+		-- Sous procedure mettant à jour le Max et Min.
+		procedure MAJ_Max_Min(Cle: Integer; Donnee: Integer) is
+		begin
+			if Max < Donnee then
+				Max := Donnee;
+			end if;
+			if Min > Donnee then
+				Min := Donnee;
+			end if;
+		end MAJ_Max_Min;
+
+		procedure Determiner_Max_Min is
+				new Pour_Chaque(MAJ_Max_Min);
+
 		package Mon_Alea is
 			new Alea (1, Borne);
 		use Mon_Alea;
 
+		SDA : T_LCA;
+		Rand : Integer;
 	begin
-		null;	-- TODO à remplacer !
+		-- Initialiser la LCA.
+		Initialiser(SDA);
+		Min := Taille;
+		Max := 0;
+
+		for i in 1..Taille loop
+			Get_Random_Number(Rand);
+			begin
+				Enregistrer(SDA, Rand, La_Donnee(SDA, Rand)+1);
+			exception
+				when Cle_Absente_Exception =>
+					Enregistrer(SDA, Rand, 1);
+			end;
+		end loop;
+
+		Determiner_Max_Min(SDA);
+
 	end Calculer_Statistiques;
 
 
@@ -85,9 +122,18 @@ begin
 		Afficher_Usage;
 	else
 		-- Récupérer les arguments de la ligne de commande
-		Borne := Integer'Value (Argument (1));
-		Taille := Integer'Value (Argument (2));
-
+		begin
+			Borne := Integer'Value (Argument (1));
+			Taille := Integer'Value (Argument (2));
+			if Borne < 2 or Taille < 2 then
+				raise CONSTRAINT_ERROR;
+			end if;
+		exception
+			when CONSTRAINT_ERROR => 
+					Put_Line("Erreur d'entrée, vous devez entrer des nombres positifs >= 2.");
+					Afficher_Usage;
+					return;
+		end;
 		-- Afficher les valeur de Borne et Taille
 		Afficher_Variable ("Borne ", Borne);
 		Afficher_Variable ("Taille", Taille);

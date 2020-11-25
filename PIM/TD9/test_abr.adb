@@ -4,13 +4,21 @@ with SDA_Exceptions; 		use SDA_Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 	--! Les Unbounded_String ont une capacité variable, contrairement au String
 	--! pour lesquelles une capacité doit être fixée.
-with TH;
+with ABR;
 
-procedure Test_TH is
+procedure Test_ABR is
 
-	package TH_String_Integer is
-		new TH (Capacite => 11, T_Cle => Unbounded_String, T_Donnee => Integer, Hachage => Length);
-	use TH_String_Integer;
+	package ABR_String_Integer is
+		new ABR (T_Cle => Unbounded_String, T_Donnee => Integer, "<" => "<");
+	use ABR_String_Integer;
+
+
+	-- Est-ce que la Cle est utilisée dans la Sda
+	function Cle_Presente (Sda : in T_ABR ; Cle : in Unbounded_String) return Boolean is
+	begin
+		return False;	-- TODO : à changer
+	end Cle_Presente;
+
 
 	-- Retourner une chaîne avec des guillemets autour de S
 	function Avec_Guillemets (S: Unbounded_String) return String is
@@ -49,16 +57,20 @@ procedure Test_TH is
 		new Pour_Chaque (Afficher);
 
 
-	Nb_Cles : constant Integer := 7;
+	Nb_Cles : constant Integer := 17;
 	Cles : constant array (1..Nb_Cles) of Unbounded_String
-			:= (+"un", +"deux", +"trois", +"quatre", +"cinq",
+			:= (+"Frank", +"Bob", +"Henri", +"Dick", +"Alice",
+				+"Eric", +"Giles", +"Jack", +"Irene", +"Chris",
+			    +"un", +"deux", +"trois", +"quatre", +"cinq",
 				+"quatre-vingt-dix-neuf", +"vingt-et-un");
 	Inconnu : constant  Unbounded_String := To_Unbounded_String ("Inconnu");
 
 	Donnees : constant array (1..Nb_Cles) of Integer
-			:= (1, 2, 3, 4, 5, 99, 21);
-	Somme_Donnees : constant Integer := 135;
-	Somme_Donnees_Len4 : constant Integer := 7; -- somme si Length (Cle) = 4
+			:= (6156, 9278, 1476, 9327, 3890,
+			    9223, 4512, 6843, 0924, 3839,
+			    1, 2, 3, 4, 5, 99, 21);
+	Somme_Donnees : constant Integer := 55468 + 135;
+	Somme_Donnees_Len4 : constant Integer := 25393 + 7; -- somme si Length (Cle) = 4
 	Somme_Donnees_Q: constant Integer := 103; -- somme si initiale de Cle = 'q'
 
 
@@ -66,7 +78,7 @@ procedure Test_TH is
 	-- Attention, c'est à l'appelant de libérer la mémoire associée en
 	-- utilisant Vider.
 	-- Si Bavard est vrai, les insertions sont tracées (affichées).
-	procedure Construire_Exemple_Sujet (Annuaire : out T_TH; Bavard: Boolean := False) is
+	procedure Construire_Exemple_Sujet (Annuaire : out T_ABR; Bavard: Boolean := False) is
 	begin
 		Initialiser (Annuaire);
 		pragma Assert (Est_Vide (Annuaire));
@@ -98,7 +110,7 @@ procedure Test_TH is
 
 
 	procedure Tester_Exemple_Sujet is
-		Annuaire : T_TH;
+		Annuaire : T_ABR;
 	begin
 		Construire_Exemple_Sujet (Annuaire, True);
 		Vider (Annuaire);
@@ -107,7 +119,7 @@ procedure Test_TH is
 
 	-- Tester suppression en commençant par les derniers éléments ajoutés
 	procedure Tester_Supprimer_Inverse is
-		Annuaire : T_TH;
+		Annuaire : T_ABR;
 	begin
 		Put_Line ("=== Tester_Supprimer_Inverse..."); New_Line;
 
@@ -136,7 +148,7 @@ procedure Test_TH is
 
 	-- Tester suppression en commençant les les premiers éléments ajoutés
 	procedure Tester_Supprimer is
-		Annuaire : T_TH;
+		Annuaire : T_ABR;
 	begin
 		Put_Line ("=== Tester_Supprimer..."); New_Line;
 
@@ -167,7 +179,7 @@ procedure Test_TH is
 
 		-- Tester supprimer sur un élément, celui à Indice dans Cles.
 		procedure Tester_Supprimer_Un_Element (Indice: in Integer) is
-			Annuaire : T_TH;
+			Annuaire : T_ABR;
 		begin
 			Construire_Exemple_Sujet (Annuaire);
 
@@ -200,7 +212,7 @@ procedure Test_TH is
 
 		-- Tester enregistrer sur un élément présent, celui à Indice dans Cles.
 		procedure Tester_Remplacer_Un_Element (Indice: in Integer; Nouveau: in Integer) is
-			Annuaire : T_TH;
+			Annuaire : T_ABR;
 		begin
 			Construire_Exemple_Sujet (Annuaire);
 
@@ -233,7 +245,7 @@ procedure Test_TH is
 
 
 	procedure Tester_Supprimer_Erreur is
-		Annuaire : T_TH;
+		Annuaire : T_ABR;
 	begin
 		begin
 			Put_Line ("=== Tester_Supprimer_Erreur..."); New_Line;
@@ -252,7 +264,7 @@ procedure Test_TH is
 
 
 	procedure Tester_La_Donnee_Erreur is
-		Annuaire : T_TH;
+		Annuaire : T_ABR;
 		Inutile: Integer;
 	begin
 		begin
@@ -272,7 +284,7 @@ procedure Test_TH is
 
 
 	procedure Tester_Pour_chaque is
-		Annuaire : T_TH;
+		Annuaire : T_ABR;
 
 		Somme: Integer;
 
@@ -300,7 +312,7 @@ procedure Test_TH is
 
 
 	procedure Tester_Pour_chaque_Somme_Si_Cle_Commence_Par_Q is
-		Annuaire : T_TH;
+		Annuaire : T_ABR;
 
 		Somme: Integer;
 
@@ -333,7 +345,7 @@ procedure Test_TH is
 
 
 	procedure Tester_Pour_chaque_Somme_Len4_Erreur is
-		Annuaire : T_TH;
+		Annuaire : T_ABR;
 
 		Somme: Integer;
 
@@ -378,4 +390,4 @@ begin
 	Tester_Pour_chaque_Somme_Si_Cle_Commence_Par_Q;
 	Tester_Pour_chaque_Somme_Len4_Erreur;
 	Put_Line ("Fin des tests : OK.");
-end Test_TH;
+end Test_ABR;

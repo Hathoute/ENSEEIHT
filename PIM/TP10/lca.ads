@@ -63,6 +63,14 @@ package LCA is
 
 private
 
-	-- TODO : à compléter
+	type T_Cellule;
+
+	type T_LCA is access T_Cellule;
+
+	type T_Cellule is record
+			Cle : T_Cle;
+			Donnee : T_Donnee;
+			Suivant : T_LCA;
+		end record;
 
 end LCA;
