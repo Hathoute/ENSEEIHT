@@ -23,5 +23,7 @@ begin
     Put("deux -> ");
     Put(La_Donnee(Donnees, To_Unbounded_String("deux")), 1);
     New_Line;
+
+    Vider(Donnees);
    
 end LCA_Sujet;

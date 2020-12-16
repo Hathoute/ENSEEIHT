@@ -36,4 +36,6 @@ begin
     Put("Elements de la table de hachage.");
     Afficher_Elements(Donnees);
     
+    Vider(Donnees);
+
 end TH_Sujet;
