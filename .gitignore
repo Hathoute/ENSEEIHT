@@ -19,3 +19,6 @@ PIM/t[pd]*
 
 # Eliminer le svn.
 PIM/.svn
+
+# Eliminer le projet mdr
+PIM/Projet
