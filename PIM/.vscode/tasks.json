@@ -63,6 +63,28 @@
                 "clean-debug"
             ],
             "problemMatcher": []
+        },
+
+        // C
+        {
+            "label": "make-c",
+            "command": "gcc",
+            "args": [
+                "-Wall",
+                "${file}",
+                "-o",
+                "${workspaceFolder}/PIM/.executables/executable"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "debug-c",
+            "dependsOn": [
+                "make-c"
+            ],
+            "problemMatcher": []
         }
     ]
 }
