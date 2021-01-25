@@ -1,0 +1,154 @@
+R0: Calculer le PageRank et les poids des pages internet.
+
+R1: Comment calculer le PageRank et les poids des pages internet passés par l'utilisateur?
+	Lire les données fournis par l'utilisateur dans la ligne de commande
+		ImpNaive: out Booléen, MaxIterations: out Entier, Alpha: out Réel, NomFichier: out ChaineCharactère
+	
+	Si ImpNaive Alors
+		Calculer le PageRank et les poids en utilisant la méthode Naive.
+			MaxIterations, Alpha, NomFichier: in; PageRank: out Tableau<Entier>, Poids: out Tableau<Réel>
+	Sinon
+		Calculer le PageRank et les poids en utilisant la méthode Creuse.
+			MaxIterations, Alpha, NomFichier: in; PageRank: out Tableau<Entier>, Poids: out Tableau<Réel>
+	FinSi
+		
+	Générer les fichiers textes contenant les données PageRank et les Poids des pages.
+		PageRank, Poids, NomFichier: in;
+	
+	
+R2:	Comment lire les données fournis par l'utilisateur dans la ligne de commande?
+	I <- 1
+	ImpNaive <- Faux
+	MaxIterations <- 150
+	Alpha <- 0.85
+	NomFichier <- ""
+	
+	Répéter
+		Block
+			Si Argument(I) = "-P" ou Argument(I) = "-p" Alors
+				ImpNaive <- Vrai
+			Sinon Si Argument(I) = "-I" ou Argument(I) = "-i" Alors
+				MaxIterations <- Entier'Image(Argument(I+1))
+				I <- I+1
+			Sinon Si Argument(I) = "-A" ou Argument(I) = "-a" Alors
+				Alpha <- Réel'Image(Argument(I+1))
+				I <- I+1
+			Sinon
+				NomFichier <- Argument(I)
+			FinSi
+		
+		Exception
+			Quand Contrainte_Erreur Alors
+				Ecrire("L'argument " & I+1 & " n'est pas conforme avec le type demandé")
+				Lever l'exception.
+			FinQuand
+		FinBlock
+		I <- I+1
+	Jusqu'à ce que I > Nombre_Arguments
+	
+	Si NomFichier = "" Alors
+		Ecrire("Vous devez spécifier un nom de fichier")
+		Terminer l'execution.
+	FinSi
+	
+R2: Comment calculer le PageRank et les poids en utilisant la méthode Naive?
+	Lire les données du fichier et calculer H.
+		NomFichier: in;				H: out Tableau<Tableau<Réel>>, L: out Tableau<Entier>
+		
+	Générer la matrice de Google.
+		H, L, Alpha: in; 		G: out T_Google
+	
+	N <- Longeur(H)
+	Poids <- Tableau<Réel> de 0..N-1
+	
+	Pour I de 0 Jusqu'à N-1 Faire
+		Poids(I) <- 1/N
+	FinPour
+	
+	Pour I de 1 Jusqu'à MaxIterations Faire
+		Multiplier Poids par G et l'affecter à Poids
+			Poids: in out, G: in
+	FinPour
+	
+	Trier Poids et Générer le PageRank
+		Poids: in out; 	PageRank: out Tableau<Entier>
+	
+R2: Commment générer les fichiers textes contenant les données PageRank et les Poids des pages?
+	Nom <- NomFichier.Enlever(".net")
+	FichierRank <- Nom + ".ord"
+	FichierPoids <- Nom + ".p"
+	
+	N <- Longeur(PageRank)
+	Pour I de 0 Jusqu'à N-1 Faire
+		Ecrire(PageRank(I), Fichier => FichierRank)
+		Ecrire(Poids(I), Fichier => FichierPoids)
+	FinPour
+	
+R3: Comment lire les données du fichier et calculer H?
+	N <- 0
+	I <- 0
+	J <- 0
+	Ouvrir le fichier NomFichier en mode Lecture.
+		NomFichier: in; 	Fichier: out
+	Lire(Fichier, N)
+	H <- Tableau<Tableau<Réel>> de 0..N-1 x 0..N-1 
+	L <- Tableau<Entier> de 0..N-1
+	
+	Initialiser les tableaux H et L à 0.
+		H, L: in out
+	
+	TantQue non FinDuFichier(Fichier)
+		Lire(Fichier, I)
+		Lire(Fichier, J)
+		H(I,J) <- 1
+		L(I) <- L(I)+1
+	FinTantQue
+	
+	Normaliser H à l'aide du tableau L.
+		L: in, H: in out
+	
+R3: Comment générer la matrice de Google?
+	N <- Longueur(L)
+	S <- H
+	Pour I de 0 jusqu'à N-1 Faire
+		Si L(I) = 0 Alors
+			Mettre toute la ligne I de S à 1/N
+				N, I: in, S: in out
+		FinSi
+		
+		Pour J de 0 jusqu'à N-1 Faire
+			S(I,J) = S(I,J)*Alpha + (1-Alpha)/N
+		FinPour
+	FinPour
+	
+	G <- S
+	
+R3: Comment multiplier Poids par G et l'affecter à Poids?
+	N <- Longueur(Poids)
+	P <- Poids;
+	Pour I de 0 jusqu'à N-1 Faire
+		Poids(I) <- 0
+		Pour J de 0 jusqu'à N-1 Faire
+			Poids(I) <- Poids(I) + P(J) * G(J,I)
+		FinPour
+	FinPour
+
+R3: Comment trier Poids et Générer le PageRank?
+	N <- Longueur(Poids)
+	Pour I de 0 Jusqu'à N-1
+		PageRank(I) <- I
+	FinPour
+	
+	Pour I de 0 Jusqu'à N-1
+		Pour J de I Jusqu'à N-1
+			Permuter PageRank(I),Poids(I) avec PageRank(J),Poids(J) respectivement si Poids(I) < Poids(J).
+		FinPour
+	FinPour
+	
+	
+	
+	
+	
+	
+	
+	

@@ -1,0 +1,19 @@
+# Sources de la version naive
+
+## pagerank.adb:
+    Programme Principale.
+
+## Module module_io:
+    Module responsable de la lecture/ecriture des fichiers.
+
+## Module google_naive:
+    Module responsable du calcul de la matrice Google et du calcul des poids des pages.
+
+## Module types:
+    Module responsable de la définition de tout les types, pour une utilisation cross-module fluide.
+
+## Module vecteur:
+    Crée un vecteur avec une taille définie à l'instant de l'initialisation.
+
+## Module lc:
+    Crée une liste chainée avec deux entrées (types) choisis par l'utilisateur.

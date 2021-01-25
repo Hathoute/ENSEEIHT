@@ -1,0 +1,18 @@
+all: ephemeride
+
+ephemeride: date.o ephemeride.o
+
+clean:
+	rm *.o ephemeride
+
+depend:
+	makedepend *.c -Y.
+	
+# DO NOT DELETE
+
+EDT.o: cours.h salle.h date.h enseignant.h
+cours.o: cours.h salle.h date.h enseignant.h
+date.o: date.h
+enseignant.o: enseignant.h date.h
+ephemeride.o: date.h
+salle.o: salle.h date.h

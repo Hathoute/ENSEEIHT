@@ -1,0 +1,28 @@
+Dans ce fichier `reponses1.txt`, 
+
+
+[Question 1.1] Indiquer 
+- comment obtenir le ou les exécutables par compilation séparée.
+    c99 -Wextra -pedantic -c  file.c 
+    c99 -Wextra -pedantic -c  exemple_file.c
+    c99 -Wextra -pedantic -c  test_file.c
+    c99  file.o exemple_file.o -o exemple_file
+    c99  file.o test_file.o -o test_file
+
+- les dépendances entre les fichiers qui constituent l’application.
+    l'exemple dépend de file, stdbool (dans file), stdio, stdlib et assert
+    le test dépend de file, stdbool, assert et stdlib
+
+- le rôle de la règle `.PHONY` dans Makefile.
+    le rôle de '.PHONY' c'est de signaler que la regle ne produit pas le fichier
+
+
+[Question 1.5] Indiquer
+- Quel est le sous-programme non-visible des autres modules et défini dans le module File.
+    C'est le sous programme cellule : "--> static <-- Cellule * cellule(...)"
+
+- Que se passe-t-il si on enlève le mot-clé static à la compilation ?  
+    Le code compile, mais maintenant cellule est un sous-programme visible au autres modules.
+
+- Quel est le risque de ne pas le mettre ?
+    Le risque de ne pas le mettre c'est la création dynamique, on n'a pas de garantie que l'utilisateur va vider les ressources créés par cette fonction.
