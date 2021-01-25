@@ -1,0 +1,8 @@
+# Eliminer le svn du TOB
+tps/.svn
+
+# Eliminer la configuration d'IntelliJ Idea
+tps/.idea
+
+# Eliminer les fichiers produits par compilation.
+tps/out
