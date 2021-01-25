@@ -19,12 +19,17 @@ package body LC is
 	end Est_Vide;
 
 	function Taille (Sda : in T_LC) return Integer is
+		Taille: Integer;
+		Temp: T_LC;
 	begin
-		if Est_Vide(Sda) then
-		   	return 0;
-		end if;
+		Taille := 0;
+		Temp := Sda;
+		while not Est_Vide(Temp) loop
+			Taille := Taille + 1;
+			Temp := Temp.all.Suivant;
+		end loop;
 
-		return Taille(Sda.all.Suivant) + 1;
+		return Taille;
 	end Taille;
 
 

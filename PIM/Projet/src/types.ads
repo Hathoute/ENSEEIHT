@@ -2,9 +2,13 @@ with TH;
 with LC;
 with Vecteur;
 
+with Ada.Text_IO;  use Ada.Text_IO;
+with Ada.Integer_Text_IO;  use Ada.Integer_Text_IO;
+with Calendar; use Calendar;
+
 package Types is
 
-    type T_Digits is digits 3;
+    type T_Digits is digits 6;
 
     type T_Rank is record 
         Rang: Integer;
@@ -28,8 +32,8 @@ package Types is
     package Vecteur_Digit is
         new Vecteur (T_Digits);
 
-    package TH_Matrice is
-        new TH(T_Indice, T_Digits, Hachage);
+    package Vecteur_Integer is
+        new Vecteur (Integer);
 
     function "<"(Gauche: T_Rank; Droit: T_Rank) return Boolean;
 

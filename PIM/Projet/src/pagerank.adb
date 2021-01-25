@@ -4,6 +4,8 @@ with Google_Creuse;
 with Types;                     use Types;
 with Ada.Strings.Unbounded;     use Ada.Strings.Unbounded;
 with Ada.Command_Line;          use Ada.Command_Line;
+with Ada.Text_IO;  use Ada.Text_IO;
+with Ada.Integer_Text_IO;  use Ada.Integer_Text_IO;
 
 procedure PageRank is
 
@@ -49,6 +51,7 @@ procedure PageRank is
 
                 I := I+1;
             end loop;
+            
         end;
 
     end Lire_Ligne_Commande;
@@ -57,21 +60,25 @@ procedure PageRank is
     begin
         if ImpNaive then
             declare
-                Google: Google_Naive.T_Google;
+                package Imp_Naive is 
+                    new Google_Naive(T_Digits, PagesNum, MaxIterations, Alpha);
+
+                Google: Imp_Naive.T_Google;
             begin
-                Google_Naive.Initialiser(Google, PagesNum, MaxIterations, Alpha);
-                Google_Naive.Creer(Google, Liens);
-                Google_Naive.Calculer_Rangs(Google, Rangs);
-                Google_Naive.Vider(Google);
+                Imp_Naive.Initialiser(Google);
+                Imp_Naive.Creer(Google, Liens);
+                Imp_Naive.Calculer_Rangs(Google, Rangs);
             end;
         else
             declare
-                Google: Google_Creuse.T_Google;
+                package Imp_Creuse is 
+                    new Google_Creuse(T_Digits, PagesNum, MaxIterations, Alpha);
+
+                Google: Imp_Creuse.T_Google;
             begin
-                Google_Creuse.Initialiser(Google, PagesNum, MaxIterations, Alpha);
-                Google_Creuse.Creer(Google, Liens);
-                Google_Creuse.Calculer_Rangs(Google, Rangs);
-                Google_Creuse.Vider(Google);
+                Imp_Creuse.Initialiser(Google);
+                Imp_Creuse.Creer(Google, Liens);
+                Imp_Creuse.Calculer_Rangs(Google, Rangs);
             end;
         end if;
 
@@ -88,7 +95,7 @@ begin
     Lire_Ligne_Commande;
 
     Lire(NomFichier, PagesNum, Liens);
-
+    
     Calculer_Rangs(Liens, Rangs);
 
     Trier_Rangs(Rangs);

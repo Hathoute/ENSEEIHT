@@ -33,12 +33,17 @@ package body LCA is
 	end Cellule;
 
 	function Taille (Sda : in T_LCA) return Integer is
+		Temp: T_LCA;
+		Taille: Integer;
 	begin
-		if Est_Vide(Sda) then
-		   	return 0;
-		end if;
+		Temp := Sda;
+		Taille := 0;
+		while not Est_Vide(Temp) loop
+		   	Taille := Taille + 1;
+			Temp := Temp.Suivant;
+		end loop;
 
-		return Taille(Sda.all.Suivant) + 1;
+		return Taille;
 	end Taille;
 
 
@@ -103,15 +108,17 @@ package body LCA is
 
 
 	procedure Pour_Chaque (Sda : in T_LCA) is
+		Temp: T_LCA;
 	begin
-		if not Est_Vide(Sda) then
+		Temp := Sda;
+		while not Est_Vide(Temp) loop
 			begin
-		   		Traiter(Sda.all.Cle, Sda.all.Donnee);
+		   		Traiter(Temp.all.Cle, Temp.all.Donnee);
 			exception
 				when others => null;
 			end;
-			Pour_Chaque(Sda.all.Suivant);
-		end if;
+			Temp := Temp.Suivant;
+		end loop;
 	end Pour_Chaque;
 
 
