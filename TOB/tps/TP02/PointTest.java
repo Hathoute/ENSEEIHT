@@ -1,4 +1,7 @@
 import org.junit.*;
+
+import java.awt.*;
+
 import static org.junit.Assert.*;
 
 /** Programme de test de la classe Point.
@@ -39,8 +42,8 @@ public class PointTest {
 		// C'est ce que fait assertEquals(attendu, réel, précision)
 		assertEquals(1.0, p1.getX(), EPSILON);
 		assertEquals(2.0, p1.getY(), EPSILON);
-		assertEquals(1.0, p2.getX(), EPSILON);
-		assertEquals(2.0, p2.getY(), EPSILON);
+		assertEquals(4.0, p2.getX(), EPSILON);
+		assertEquals(-2.0, p2.getY(), EPSILON);
 	}
 
 	@Test
@@ -79,6 +82,20 @@ public class PointTest {
 		p2.translater(-2, -4);
 		assertEquals(2.0, p2.getX(), EPSILON);
 		assertEquals(-6.0, p2.getY(), EPSILON);
+	}
+
+	@Test
+	public void testGetCouleur() {
+		assertEquals(Color.GREEN, p1.getCouleur());
+		assertEquals(Color.GREEN, p2.getCouleur());
+	}
+
+	@Test
+	public void testSetCouleur() {
+		p1.setCouleur(Color.BLACK);
+		p2.setCouleur(Color.RED);
+		assertEquals(Color.BLACK, p1.getCouleur());
+		assertEquals(Color.RED, p2.getCouleur());
 	}
 
 }
