@@ -9,7 +9,7 @@ import java.awt.Color;
 public class Cercle implements Mesurable2D {
 
     /** Valeur de PI. */
-    private static final double PI = Math.PI;
+    public static final double PI = Math.PI;
 
     /** Centre du cercle. */
     private final Point centre;
@@ -24,7 +24,7 @@ public class Cercle implements Mesurable2D {
      */
     public Cercle(Point centre, double rayon) {
         assert centre != null;
-        assert rayon >= 0;
+        assert rayon > 0;
 
         this.centre = new Point(centre.getX(), centre.getY());
         this.rayon = rayon;
@@ -36,8 +36,9 @@ public class Cercle implements Mesurable2D {
      * @param pt1 Premier point
      * @param pt2 Deuxième point
      */
-    public Cercle(Point pt1, Point pt2) {
+    public  Cercle(Point pt1, Point pt2) {
         assert pt1 != null && pt2 != null;
+        assert pt1.getX() != pt2.getX() && pt1.getY() != pt2.getY();
 
         double absCercle = (pt1.getX() + pt2.getX()) / 2;
         double ordCercle = (pt1.getY() + pt2.getY()) / 2;
@@ -54,6 +55,8 @@ public class Cercle implements Mesurable2D {
      */
     public Cercle(Point pt1, Point pt2, Color couleur) {
         assert pt1 != null && pt2 != null;
+        assert couleur != null;
+        assert pt1.getX() != pt2.getX() && pt1.getY() != pt2.getY();
 
         double absCercle = (pt1.getX() + pt2.getX()) / 2;
         double ordCercle = (pt1.getY() + pt2.getY()) / 2;
@@ -70,6 +73,7 @@ public class Cercle implements Mesurable2D {
     public static Cercle creerCercle(Point centre, Point pt) {
         assert centre != null;
         assert pt != null;
+        assert pt.getX() != centre.getX() && pt.getY() != centre.getY();
 
         return new Cercle(centre, centre.distance(pt));
     }
@@ -100,7 +104,7 @@ public class Cercle implements Mesurable2D {
      * @param nouveau   Nouveau rayon du cercle
      */
     public void setRayon(double nouveau) {
-        assert nouveau >= 0;
+        assert nouveau > 0;
 
         rayon = nouveau;
     }
@@ -116,7 +120,7 @@ public class Cercle implements Mesurable2D {
      * @param nouveau   Nouveau diamètre du cercle
      */
     public void setDiametre(double nouveau) {
-        assert nouveau >= 0;
+        assert nouveau > 0;
 
         rayon = nouveau / 2;
     }
@@ -132,6 +136,8 @@ public class Cercle implements Mesurable2D {
      * @param nouvelle   Nouvelle couleur du cercle
      */
     public void setCouleur(Color nouvelle) {
+        assert nouvelle != null;
+
         couleur = nouvelle;
     }
 
@@ -157,7 +163,7 @@ public class Cercle implements Mesurable2D {
 
     @Override
     public String toString() {
-        return "C" + rayon + "@(" + centre.getX() + ", " + centre.getY() + ")";
+        return "C" + rayon + "@" + centre;
     }
 
 }

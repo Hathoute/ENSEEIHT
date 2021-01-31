@@ -13,6 +13,7 @@
 
 # Test file for custom code
 PIM/tests.adb
+PIM/tests.c
 
 # Eliminer les td/tp non faits
 PIM/t[pd]*
