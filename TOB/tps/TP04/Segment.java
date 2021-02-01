@@ -1,3 +1,6 @@
+import afficheur.AfficheurSVG;
+import afficheur.Ecran;
+
 import java.awt.Color;
 
 /** Un segment est défini pas ses deux points qui constituent ses
@@ -73,4 +76,21 @@ public class Segment {
 		this.couleur = nouvelleCouleur;
 	}
 
+	/** Dessiner le segment dans un écran.
+	 * @param ecran Ecran de dessin
+	 */
+	public void dessiner(Ecran ecran) {
+		ecran.dessinerLigne(extremite1.getX(), extremite1.getY(),
+				extremite2.getX(), extremite2.getY(),
+				couleur);
+	}
+
+	/** Dessiner le segment dans un Afficheur SVG.
+	 * @param afficheurSVG Afficheur de dessin
+	 */
+	public void dessiner(AfficheurSVG afficheurSVG) {
+		afficheurSVG.dessinerLigne(extremite1.getX(), extremite1.getY(),
+				extremite2.getX(), extremite2.getY(),
+				couleur);
+	}
 }

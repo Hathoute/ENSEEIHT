@@ -1,3 +1,5 @@
+import afficheur.AfficheurSVG;
+import afficheur.Ecran;
 
 /** Construire le schéma proposé dans le sujet de TP avec des points,
   * et des segments.
@@ -32,6 +34,47 @@ public class ExempleSchema1 {
 		s23.afficher();		System.out.println();
 		s31.afficher();		System.out.println();
 		barycentre.afficher();	System.out.println();
+
+		// Dessiner le shéma
+		Ecran ecran = new Ecran("Schéma", 600, 400, 20);
+		//ecran.dessinerAxes();
+		s12.dessiner(ecran);
+		s23.dessiner(ecran);
+		s31.dessiner(ecran);
+		barycentre.dessiner(ecran);
+
+		// Translater le schéma
+		s12.translater(4, -3);
+		s23.translater(4, -3);
+		s31.translater(4, -3);
+		barycentre.translater(4, -3);
+
+		// Afficher le nouveau schéma
+		System.out.println("Le nouveau schéma est composé de : ");
+		s12.afficher();		System.out.println();
+		s23.afficher();		System.out.println();
+		s31.afficher();		System.out.println();
+		barycentre.afficher();	System.out.println();
+
+		// Dessiner le nouveau schéma
+		ecran.effacer();
+		s12.dessiner(ecran);
+		s23.dessiner(ecran);
+		s31.dessiner(ecran);
+		barycentre.dessiner(ecran);
+		ecran.rafraichir();
+
+		// Afficheur SVG
+		AfficheurSVG afficheurSVG = new AfficheurSVG("Schéma",
+				"Dessin du schéma de l'exercice 2", 600, 400);
+		s12.dessiner(afficheurSVG);
+		s23.dessiner(afficheurSVG);
+		s31.dessiner(afficheurSVG);
+		barycentre.dessiner(afficheurSVG);
+
+		// Affichage du SVG
+		afficheurSVG.ecrire();
+		afficheurSVG.ecrire("schema.svg");
 	}
 
 }

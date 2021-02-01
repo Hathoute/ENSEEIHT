@@ -1,3 +1,6 @@
+import afficheur.AfficheurSVG;
+import afficheur.Ecran;
+
 import java.awt.Color;
 
 /** Point modélise un point géométrique dans un plan équipé d'un
@@ -88,4 +91,17 @@ public class Point {
 		this.couleur = nouvelleCouleur;
 	}
 
+	/** Dessiner le point dans un écran.
+	 * @param ecran Ecran de dessin
+	 */
+	public void dessiner(Ecran ecran) {
+		ecran.dessinerPoint(x, y, couleur);
+	}
+
+	/** Dessiner le point dans un Afficheur SVG.
+	 * @param afficheurSVG afficheur de dessin
+	 */
+	public void dessiner(AfficheurSVG afficheurSVG) {
+		afficheurSVG.dessinerPoint(x, y, couleur);
+	}
 }
