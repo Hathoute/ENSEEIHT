@@ -6,3 +6,6 @@ tps/.idea
 
 # Eliminer les fichiers produits par compilation.
 tps/out
+
+# Eliminer les evaluations
+tps/mini-projet/evaluations
