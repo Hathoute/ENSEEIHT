@@ -2,6 +2,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -15,25 +16,31 @@ public class CercleTest {
     // précision pour la comparaison entre réels.
 
     // Les points du sujet
-    private Point C, D, E;
+    private Point C, D, centre;
+    double rayon;
 
     @Before
     public void setUp() {
         // Construire les points
-        C = new Point(4, 1);
-        D = new Point(8, 1);
-        E = new Point(8, 4);
+        Random random = new Random();
+
+        C = new Point(random.nextFloat(), random.nextFloat());
+        D = new Point(C.getX() + 1.0 + random.nextFloat(),
+                C.getY() + 1.0 + random.nextFloat());
+
+        centre = new Point((C.getX()+D.getX())/2, (C.getY()+D.getY())/2);
+        rayon = C.distance(D)/2;
     }
 
     @Test
     public void testerE12() {
         Cercle cercle = new Cercle(C, D);
         assertEquals("E12 : Rayon de C2 incorrect",
-                2.0, cercle.getRayon(), EPSILON);
+                rayon, cercle.getRayon(), EPSILON);
         assertEquals("E12 : Abscisse du centre incorrect",
-                6.0, cercle.getCentre().getX(), EPSILON);
+                centre.getX(), cercle.getCentre().getX(), EPSILON);
         assertEquals("E12 : Ordonnée du centre incorrect",
-                1.0, cercle.getCentre().getY(), EPSILON);
+                centre.getY(), cercle.getCentre().getY(), EPSILON);
         assertEquals("E12 : Couleur du centre incorrect",
                 Color.blue, cercle.getCouleur());
     }
@@ -42,26 +49,25 @@ public class CercleTest {
     public void testerE13() {
         Cercle cercle = new Cercle(C, D, Color.green);
         assertEquals("E13 : Rayon de C2 incorrect",
-                2.0, cercle.getRayon(), EPSILON);
+                rayon, cercle.getRayon(), EPSILON);
         assertEquals("E13 : Abscisse du centre incorrect",
-                6.0, cercle.getCentre().getX(), EPSILON);
+                centre.getX(), cercle.getCentre().getX(), EPSILON);
         assertEquals("E13 : Ordonnée du centre incorrect",
-                1.0, cercle.getCentre().getY(), EPSILON);
+                centre.getY(), cercle.getCentre().getY(), EPSILON);
         assertEquals("E13 : Couleur du centre incorrect",
                 Color.green, cercle.getCouleur());
     }
 
     @Test
     public void testerE14() {
-        Cercle cercle = Cercle.creerCercle(D, E);
+        Cercle cercle = Cercle.creerCercle(C, D);
         assertEquals("E14 : Rayon de C2 incorrect",
-                3.0, cercle.getRayon(), EPSILON);
+                C.distance(D), cercle.getRayon(), EPSILON);
         assertEquals("E14 : Abscisse du centre incorrect",
-                D.getX(), cercle.getCentre().getX(), EPSILON);
+                C.getX(), cercle.getCentre().getX(), EPSILON);
         assertEquals("E14 : Ordonnée du centre incorrect",
-                D.getY(), cercle.getCentre().getY(), EPSILON);
+                C.getY(), cercle.getCentre().getY(), EPSILON);
         assertEquals("E14 : Couleur du centre incorrect",
                 Color.blue, cercle.getCouleur());
     }
-
 }
