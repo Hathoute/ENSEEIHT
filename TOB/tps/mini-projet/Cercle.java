@@ -37,14 +37,7 @@ public class Cercle implements Mesurable2D {
      * @param pt2 Deuxième point
      */
     public  Cercle(Point pt1, Point pt2) {
-        assert pt1 != null && pt2 != null;
-        assert pt1.getX() != pt2.getX() && pt1.getY() != pt2.getY();
-
-        double absCercle = (pt1.getX() + pt2.getX()) / 2;
-        double ordCercle = (pt1.getY() + pt2.getY()) / 2;
-        this.centre = new Point(absCercle, ordCercle);
-        this.rayon = pt1.distance(pt2) / 2;
-        this.couleur = Color.blue;
+        this(pt1, pt2, Color.blue);
     }
 
     /** Construire un cercle à partir de deux points
@@ -56,7 +49,7 @@ public class Cercle implements Mesurable2D {
     public Cercle(Point pt1, Point pt2, Color couleur) {
         assert pt1 != null && pt2 != null;
         assert couleur != null;
-        assert pt1.getX() != pt2.getX() && pt1.getY() != pt2.getY();
+        assert pt1.getX() != pt2.getX() || pt1.getY() != pt2.getY();
 
         double absCercle = (pt1.getX() + pt2.getX()) / 2;
         double ordCercle = (pt1.getY() + pt2.getY()) / 2;
@@ -73,7 +66,7 @@ public class Cercle implements Mesurable2D {
     public static Cercle creerCercle(Point centre, Point pt) {
         assert centre != null;
         assert pt != null;
-        assert pt.getX() != centre.getX() && pt.getY() != centre.getY();
+        assert pt.getX() != centre.getX() || pt.getY() != centre.getY();
 
         return new Cercle(centre, centre.distance(pt));
     }
