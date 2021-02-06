@@ -64,9 +64,7 @@ public class Cercle implements Mesurable2D {
      * @return Le cercle qui répond à ces caractéristiques.
      */
     public static Cercle creerCercle(Point centre, Point pt) {
-        assert centre != null;
-        assert pt != null;
-        assert pt.getX() != centre.getX() || pt.getY() != centre.getY();
+        assert centre != null && pt != null;
 
         return new Cercle(centre, centre.distance(pt));
     }
