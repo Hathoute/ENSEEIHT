@@ -8,7 +8,7 @@ Consigne :  Ci-dessous, répondre à la place des « ... ».
 
 =====[ Temps ]==================================================================
 
-Temps consacré au projet pour rendre la V1 : 1 heures ~30 minutes
+Temps consacré au projet pour rendre la V1 : 2 heures ~ 0 minutes
 Temps consacré au projet pour rendre la V2 : ... heures ... minutes
 Pour la V2 on ne tiendra pas compte du temps passé sur la V1.
 Bien sûr, Les temps renseignés ici ne sont pas pris en compte dans la notation.
