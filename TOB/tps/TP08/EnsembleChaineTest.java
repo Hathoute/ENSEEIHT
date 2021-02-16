@@ -3,8 +3,8 @@
  */
 public class EnsembleChaineTest extends EnsembleTestAbstrait {
 
-	protected Ensemble nouvelEnsemble(int capacite) {
-		return new EnsembleChaine();
+	protected Ensemble<Integer> nouvelEnsemble(int capacite) {
+		return new EnsembleChaine<Integer>();
 	}
 
 }

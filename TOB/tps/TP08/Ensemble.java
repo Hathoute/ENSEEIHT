@@ -1,5 +1,5 @@
 /** Définition d'un ensemble d'entier. */
-public interface Ensemble {
+public interface Ensemble<E> {
 	//@ public invariant estVide() <==> cardinal() == 0;
 	//@ public invariant 0 <= cardinal();
 
@@ -14,16 +14,16 @@ public interface Ensemble {
 	/** Savoir si un élément est présent dans l'ensemble.
 	 * @param x l'élément cherché
 	 * @return x est dans l'ensemble */
-	/*@ pure helper @*/ boolean contient(int x);
+	/*@ pure helper @*/ boolean contient(E x);
 
 	/** Ajouter un élément dans l'ensemble.
 	 * @param x l'élément à ajouter */
 	//@ ensures contient(x);        // élément ajouté
-	void ajouter(int x);
+	void ajouter(E x);
 
 	/** Enlever un élément de l'ensemble.
 	  * @param x l'élément à supprimer */
 	//@ ensures ! contient(x);      // élément supprimé
-	void supprimer(int x);
+	void supprimer(E x);
 
 }
