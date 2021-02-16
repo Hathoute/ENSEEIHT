@@ -13,11 +13,25 @@ public class Jouer {
 	 */
 	public static void main(String[] args) {
 		try {
+			//TODO: remove!
+			boolean isDebug = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("-agentlib:jdwp");
+			if(isDebug) {
+				args = new String[2];
+				args[0] = "eeee@Naif";
+				args[1] = "aaaa@Tricheur";
+			}
+
 			verifierNombreArguments(args);
 
-			System.out.println("\n\tà faire !\n");
+			//TODO: ajouter le paramètre de confiance...
 
-		} catch (ConfigurationException e) {
+			Joueur j1 = new Joueur(args[0]);
+			Joueur j2 = new Joueur(args[1]);
+			Jeu jeu = new Allumettes();
+			Arbitre arbitre = new Arbitre(j1, j2);
+			arbitre.arbitrer(jeu);
+
+		} catch (ConfigurationException | IdentifiantJoueurException e) {
 			System.out.println();
 			System.out.println("Erreur : " + e.getMessage());
 			afficherUsage();
