@@ -7,7 +7,7 @@ import java.awt.Color;
  *
  * @author  Xavier Crégut <Prénom.Nom@enseeiht.fr>
  */
-public class Point {
+public class Point extends ObjetGeometrique {
 	private double x;		// abscisse
 	private double y;		// ordonnée
 
@@ -20,6 +20,8 @@ public class Point {
 	 * @param vy ordonnée
 	 */
 	public Point(double vx, double vy) {
+		super();
+
 		this.x = vx;
 		this.y = vy;
 		this.couleur = Color.green;

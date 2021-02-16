@@ -39,9 +39,9 @@ public class TestPolymorphisme {
 		PointNomme qn;
 
 		// Attacher un point à q et l'afficher
-		qn = p1;			// Est-ce autorisé ? Pourquoi ?
-		System.out.println ("> qn = p1;");
-		System.out.print ("qn = "); qn.afficher(); System.out.println ();
+		//qn = p1;			// Est-ce autorisé ? Pourquoi ?
+		//System.out.println ("> qn = p1;");
+		//System.out.print ("qn = "); qn.afficher(); System.out.println ();
 										// Qu'est ce qui est affiché ?
 
 		// Attacher un point nommé à qn et l'afficher
@@ -59,18 +59,18 @@ public class TestPolymorphisme {
 		double d3 = pn1.distance (pn1);	// Est-ce autorisé ? Pourquoi ?
 		System.out.println ("distance = " + d3);
 
-		System.out.println ("> qn = q;");
-		qn = q;				// Est-ce autorisé ? Pourquoi ?
-		System.out.print ("qn = "); qn.afficher(); System.out.println ();
+		//System.out.println ("> qn = q;");
+		//qn = q;				// Est-ce autorisé ? Pourquoi ?
+		//System.out.print ("qn = "); qn.afficher(); System.out.println ();
 										// Qu'est ce qui est affiché ?
 
 		System.out.println ("> qn = (PointNomme) q;");
 		qn = (PointNomme) q;		// Est-ce autorisé ? Pourquoi ?
 		System.out.print ("qn = "); qn.afficher(); System.out.println ();
 
-		System.out.println ("> qn = (PointNomme) p1;");
-		qn = (PointNomme) p1;		// Est-ce autorisé ? Pourquoi ?
-		System.out.print ("qn = "); qn.afficher(); System.out.println ();
+		//System.out.println ("> qn = (PointNomme) p1;");
+		//qn = (PointNomme) p1;		// Est-ce autorisé ? Pourquoi ?
+		//System.out.print ("qn = "); qn.afficher(); System.out.println ();
 	}
 
 }

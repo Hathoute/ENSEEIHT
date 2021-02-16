@@ -1,6 +1,9 @@
 import afficheur.Ecran;
 import afficheur.Afficheur;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /** Construire le schéma proposé dans le sujet de TP avec des points,
   * des points nommés
   * et des segments.
@@ -29,9 +32,9 @@ public class ExempleSchemaTab {
 		double sx = p1.getX() + p2.getX() + p3.getX();
 		double sy = p1.getY() + p2.getY() + p3.getY();
 		Point barycentre = new PointNomme(sx / 3, sy / 3, "C");
-
+		/*
 		// Définir le schéma (vide)
-		X schema[] = new X[10];	// le schéma
+		ObjetGeometrique schema[] = new ObjetGeometrique[10];	// le schéma
 			// 10 : capacité suffisante ici, non contrôlée dans la suite.
 		int nb = 0;		// Le nombre d'éléments dans le schéma
 
@@ -73,6 +76,43 @@ public class ExempleSchemaTab {
 		// Dessiner le schéma sur l'écran graphique
 		for (int i = 0; i < nb; i++) {
 			schema[i].dessiner(ecran);
+		}
+
+		// Forcer l'affichage du schéma (au cas où...)
+		ecran.rafraichir();
+		*/
+
+		// Utiliser une liste
+		List<ObjetGeometrique> schemaArray = new ArrayList<>();
+		schemaArray.add(s12);
+		schemaArray.add(s23);
+		schemaArray.add(s31);
+		schemaArray.add(barycentre);
+
+		// Créer l'écran d'affichage
+		Ecran ecran = new Ecran("ExempleSchemaTab", 600, 400, 20);
+		ecran.dessinerAxes();
+
+		// Dessiner le schéma sur l'écran graphique
+		for(ObjetGeometrique obj : schemaArray) {
+			obj.dessiner(ecran);
+		}
+
+		// Translater le schéma
+		for(ObjetGeometrique obj : schemaArray) {
+			obj.translater(4, -3);
+		}
+
+		// Afficher le schéma
+		System.out.println("Le schéma est composé de : ");
+		for(ObjetGeometrique obj : schemaArray) {
+			obj.afficher();
+			System.out.println();
+		}
+
+		// Dessiner le schéma sur l'écran graphique
+		for(ObjetGeometrique obj : schemaArray) {
+			obj.dessiner(ecran);
 		}
 
 		// Forcer l'affichage du schéma (au cas où...)

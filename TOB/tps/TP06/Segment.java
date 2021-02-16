@@ -7,7 +7,7 @@ import java.awt.Color;
  * @author	Xavier Crégut
  * @version	1.9
  */
-public class Segment {
+public class Segment extends ObjetGeometrique {
 
 	private Point extremite1;
 	private Point extremite2;
@@ -18,6 +18,7 @@ public class Segment {
 	 *  @param ext2	le deuxième point extrémité
 	 */
 	public Segment(Point ext1, Point ext2) {
+		super();
 		this.extremite1 = ext1;
 		this.extremite2 = ext2;
 		this.couleur = Color.green;
