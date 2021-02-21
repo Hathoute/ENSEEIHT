@@ -9,3 +9,6 @@ tps/out
 
 # Eliminer les evaluations
 tps/mini-projet/evaluations
+
+# Eliminer les .class
+*.class

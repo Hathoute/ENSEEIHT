@@ -25,7 +25,7 @@ public class Jouer {
 			//TODO: remove!
 			boolean isDebug = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("-agentlib:jdwp");
 			if(isDebug) {
-				args = "-confiant aaa@Tricheur bbb@Naif".split(" ");
+				args = "-confiant Xavier@humain Ordinateur@expert".split(" ");
 			}
 
 			verifierNombreArguments(args);
