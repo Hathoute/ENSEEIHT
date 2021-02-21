@@ -1,4 +1,4 @@
 package allumettes;
 
-public class OperationInterditeException extends CoupInvalideException {
+public class OperationInterditeException extends RuntimeException {
 }

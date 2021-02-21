@@ -18,7 +18,8 @@ Bien sûr, Les temps renseignés ici ne sont pas pris en compte dans la notation
 
 Indiquer la relation UML entre Cercle et le Point centre du cercle.
 -------------------------------------------------------------------
-La relation UML entre Cercle et Point est "Composition".
+La relation UML entre Cercle et Point est "Composition" puisqu'on crée le Point centre du cercle à l'initialisation
+du Cercle et donc il est propre à lui.
 
 
 Comment est réalisée l'exigence E18 ?

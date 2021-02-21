@@ -7,6 +7,15 @@ package allumettes;
  */
 public class Jouer {
 
+
+	enum Strategie {
+		HUMAIN,
+		NAIF,
+		RAPIDE,
+		EXPERT,
+		TRICHEUR
+	}
+
 	/** Lancer une partie. En argument sont donnés les deux joueurs sous
 	 * la forme nom@stratégie.
 	 * @param args la description des deux joueurs
@@ -16,19 +25,23 @@ public class Jouer {
 			//TODO: remove!
 			boolean isDebug = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("-agentlib:jdwp");
 			if(isDebug) {
-				args = new String[2];
-				args[0] = "eeee@Naif";
-				args[1] = "aaaa@Tricheur";
+				args = "aaa@Tricheur bbb@Naif".split(" ");
 			}
 
 			verifierNombreArguments(args);
 
-			//TODO: ajouter le paramètre de confiance...
+			boolean modeConfiant = false;
+			if(args.length == 3) {
+				if(!args[0].equals("-confiant"))
+					throw new ConfigurationException("Option " + args[0] + " non reconnue");
 
-			Joueur j1 = new Joueur(args[0]);
-			Joueur j2 = new Joueur(args[1]);
+				modeConfiant = true;
+			}
+
+			Joueur j1 = creerJoueur(args[modeConfiant ? 1 : 0]);
+			Joueur j2 = creerJoueur(args[modeConfiant ? 2 : 1]);
 			Jeu jeu = new Allumettes();
-			Arbitre arbitre = new Arbitre(j1, j2);
+			Arbitre arbitre = new Arbitre(j1, j2, modeConfiant);
 			arbitre.arbitrer(jeu);
 
 		} catch (ConfigurationException | IdentifiantJoueurException e) {
@@ -36,6 +49,40 @@ public class Jouer {
 			System.out.println("Erreur : " + e.getMessage());
 			afficherUsage();
 			System.exit(1);
+		}
+	}
+
+	private static Joueur creerJoueur(String identifiant) throws IdentifiantJoueurException {
+		String[] parties = identifiant.split("@");
+		if(parties.length != 2)
+			throw new IdentifiantJoueurException("Format Invalide");
+
+		String nom = parties[0];
+		IStrategie strategie = creerStrategie(parties[1]);
+		return new Joueur(nom, strategie);
+	}
+
+	private static IStrategie creerStrategie(String nomStrategie) throws IdentifiantJoueurException {
+		Strategie strategie;
+		try {
+			strategie = Strategie.valueOf(nomStrategie.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			throw new IdentifiantJoueurException("Stratégie Invalide");
+		}
+
+		switch (strategie) {
+			case TRICHEUR:
+				return new StrategieTricheur();
+			case EXPERT:
+				return new StrategieExpert();
+			case RAPIDE:
+				return new StrategieRapide();
+			case NAIF:
+				return new StrategieNaive();
+			case HUMAIN:
+				return new StrategieHumaine();
+			default:
+				throw new IdentifiantJoueurException("Stratégie non implémentée");
 		}
 	}
 
