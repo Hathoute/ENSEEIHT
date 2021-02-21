@@ -37,7 +37,7 @@ public class Arbitre {
             try {
                 int prise = joueur.getPrise(procuration);
                 System.out.println(joueur.getNom() + " prend " + prise + " allumette" +
-                        (prise > 1 ? "s" : ""));
+                        (prise > 1 ? "s" : "") + ".");
                 jeu.retirer(prise);
             } catch(CoupInvalideException e) {
                 System.out.println(" Impossible ! Nombre d'allumettes invalide : " +
