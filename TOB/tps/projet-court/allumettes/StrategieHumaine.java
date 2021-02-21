@@ -8,7 +8,7 @@ public class StrategieHumaine implements IStrategie {
 
     public int getPrise(Joueur joueur, Jeu jeu) {
         while(true) {
-            System.out.println(joueur.getNom() + ", combien d'allumettes ?");
+            System.out.print(joueur.getNom() + ", combien d'allumettes ? ");
             String input = scanner.next();
 
             if(input.equals("triche")) {

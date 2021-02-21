@@ -29,19 +29,19 @@ public class Arbitre {
     }
 
     private boolean jouerTour() {
-        System.out.println("Nombre d'allumettes restantes : " + jeu.getNombreAllumettes());
 
         Joueur joueur = tourJ1 ? j1 : j2;
         Jeu procuration = estConfiant ? jeu : new AllumettesProxy(jeu);
         while(true) {
+            System.out.println("Nombre d'allumettes restantes : " + jeu.getNombreAllumettes());
             try {
                 int prise = joueur.getPrise(procuration);
                 System.out.println(joueur.getNom() + " prend " + prise + " allumette" +
                         (prise > 1 ? "s" : "") + ".");
                 jeu.retirer(prise);
             } catch(CoupInvalideException e) {
-                System.out.println(" Impossible ! Nombre d'allumettes invalide : " +
-                        e.getNombreAllumettes() + " (" + e.getMessage() + ")");
+                System.out.println("Impossible ! " + e.getMessage());
+                System.out.println();
                 continue;
             } catch (OperationInterditeException e) {
                 System.out.println("Abandon de la partie car " + joueur.getNom() + " triche !");
