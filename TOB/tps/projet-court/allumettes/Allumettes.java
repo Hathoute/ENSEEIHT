@@ -18,12 +18,12 @@ public class Allumettes implements Jeu {
     @Override
     public void retirer(int nbPrises) throws CoupInvalideException {
         String probleme = "";
-        if(nbPrises > PRISE_MAX)
-            probleme = "> " + PRISE_MAX;
+        if(nbPrises > nombreAllumettes)
+            probleme = "> " + nombreAllumettes;
         else if(nbPrises < 1)
             probleme = "< 1";
-        else if(nbPrises > nombreAllumettes)
-            probleme = "> " + nombreAllumettes;
+        else if(nbPrises > PRISE_MAX)
+            probleme = "> " + PRISE_MAX;
 
         if(!probleme.isEmpty())
             throw new CoupInvalideException(nbPrises, probleme);
