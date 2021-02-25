@@ -12,3 +12,9 @@ tps/mini-projet/evaluations
 
 # Eliminer les .class
 *.class
+
+# Eliminer les evaluations
+tps/projet-court/evaluations
+
+# Eliminer les tests
+tps/projet-court/tests
