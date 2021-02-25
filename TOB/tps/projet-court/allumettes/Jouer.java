@@ -24,16 +24,18 @@ public class Jouer {
 		try {
 			//TODO: remove!
 			boolean isDebug = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("-agentlib:jdwp");
-			if(isDebug) {
+			if (isDebug) {
 				args = "-confiant Xavier@humain Ordinateur@expert".split(" ");
 			}
 
 			verifierNombreArguments(args);
 
 			boolean modeConfiant = false;
-			if(args.length == 3) {
-				if(!args[0].equals("-confiant"))
-					throw new ConfigurationException("Option " + args[0] + " non reconnue");
+			if (args.length == 3) {
+				if (!args[0].equals("-confiant")) {
+					throw new ConfigurationException("Option " + args[0]
+							+ " non reconnue");
+				}
 
 				modeConfiant = true;
 			}
@@ -41,7 +43,8 @@ public class Jouer {
 			Joueur j1 = creerJoueur(args[modeConfiant ? 1 : 0]);
 			Joueur j2 = creerJoueur(args[modeConfiant ? 2 : 1]);
 			Jeu jeu = new Allumettes();
-			Arbitre arbitre = new Arbitre(j1, j2, modeConfiant);
+			Arbitre arbitre = new Arbitre(j1, j2);
+			arbitre.setConfiant(modeConfiant);
 			arbitre.arbitrer(jeu);
 
 		} catch (ConfigurationException | IdentifiantJoueurException e) {
@@ -52,17 +55,20 @@ public class Jouer {
 		}
 	}
 
-	private static Joueur creerJoueur(String identifiant) throws IdentifiantJoueurException {
+	private static Joueur creerJoueur(String identifiant)
+			throws IdentifiantJoueurException {
 		String[] parties = identifiant.split("@");
-		if(parties.length != 2)
+		if (parties.length != 2) {
 			throw new IdentifiantJoueurException("Format Invalide");
+		}
 
 		String nom = parties[0];
 		IStrategie strategie = creerStrategie(parties[1]);
 		return new Joueur(nom, strategie);
 	}
 
-	private static IStrategie creerStrategie(String nomStrategie) throws IdentifiantJoueurException {
+	private static IStrategie creerStrategie(String nomStrategie)
+			throws IdentifiantJoueurException {
 		Strategie strategie;
 		try {
 			strategie = Strategie.valueOf(nomStrategie.toUpperCase());

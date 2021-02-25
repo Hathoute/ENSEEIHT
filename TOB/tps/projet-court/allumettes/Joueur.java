@@ -5,7 +5,7 @@ public class Joueur {
     private final String nom;
     private IStrategie strategie;
 
-    public Joueur(String nom, IStrategie strategie){
+    public Joueur(String nom, IStrategie strategie) {
         this.nom = nom;
         this.strategie = strategie;
     }
