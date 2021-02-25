@@ -4,10 +4,10 @@ import java.util.Random;
 
 public class StrategieNaive implements IStrategie {
 
-    private static final Random random = new Random();
+    private static final Random RANDOM = new Random();
 
     public int getPrise(Joueur joueur, Jeu jeu) {
-        return random.nextInt(3) + 1;
+        return RANDOM.nextInt(Jeu.PRISE_MAX) + 1;
     }
 
 }

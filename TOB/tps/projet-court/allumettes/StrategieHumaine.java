@@ -4,14 +4,14 @@ import java.util.Scanner;
 
 public class StrategieHumaine implements IStrategie {
 
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final Scanner SCANNER = new Scanner(System.in);
 
     public int getPrise(Joueur joueur, Jeu jeu) {
-        while(true) {
+        while (true) {
             System.out.print(joueur.getNom() + ", combien d'allumettes ? ");
-            String input = scanner.next();
+            String input = SCANNER.next();
 
-            if(input.equals("triche")) {
+            if (input.equals("triche")) {
                 tricherHumain(jeu);
                 continue;
             }
@@ -27,8 +27,10 @@ public class StrategieHumaine implements IStrategie {
     private void tricherHumain(Jeu jeu) {
         try {
             jeu.retirer(1);
-        } catch (CoupInvalideException e) {};
-        System.out.println("[Une allumette en moins, plus que " + jeu.getNombreAllumettes() + ". Chut !]");
+        } catch (CoupInvalideException e) {
+        }
+        System.out.println("[Une allumette en moins, plus que "
+                + jeu.getNombreAllumettes() + ". Chut !]");
     }
 
 }
