@@ -28,6 +28,8 @@ public class Menu  {
 	private Commande selection;	// Commande sélectionnée
 	private boolean estQuitte;	// le menu a-t-il  été quitté ?
 
+	private HashMap<String, Integer> raccourcis;
+
 	/** Construire un menu vide (sans entrées).
 	 * @param sonTitre le titre du menu
 	 */
@@ -36,6 +38,7 @@ public class Menu  {
 	//@ ensures estQuitte() == false;	// pas encore quitter !
 	public Menu(String sonTitre) {
 		this.entrees = new ArrayList<Entree>();
+		this.raccourcis = new HashMap<String, Integer>();
 		this.titre = sonTitre;
 		this.selection = null;
 		this.estQuitte = false;
@@ -47,9 +50,9 @@ public class Menu  {
 	}
 
 	/** Obtenir une entrée du menu.
-	  * @param i position de l'entrée
-	  * @retrun l'entrée correspondant à i
-	  */
+	 * @param i position de l'entrée
+	 * @retrun l'entrée correspondant à i
+	 */
 	//@ requires  0 <= i && i <= getNbEntrees();
 	private /*@ pure @*/ Entree getEntree(int i) {
 		if (i > 0) {
@@ -71,6 +74,20 @@ public class Menu  {
 	//@ requires cmd != null;		// commande définie
 	public void ajouter(String texte, Commande cmd) {
 		this.entrees.add(new Entree(texte, cmd));
+	}
+
+	/** Ajouter une entrée avec raccourci
+	 * @param texte l'intitulé dans le menu
+	 * @param raccourci le raccourci de la commande
+	 * @param cmd la commande associée
+	 */
+	//@ requires texte != null && texte.length() > 0; // texte défini
+	//@ requires !raccourcis.containsKey(raccourci);
+	//@ requires cmd != null;		// commande définie
+	public void ajouter(String texte, String raccourci, Commande cmd) {
+		EntreeRaccourci e = new EntreeRaccourci(texte, raccourci, cmd);
+		this.entrees.add(e);
+		this.raccourcis.put(raccourci, entrees.size());
 	}
 
 	/** Tracer une séparation du menu. */
@@ -113,9 +130,9 @@ public class Menu  {
 		int choix;
 		boolean choix_valide = false;
 		do {
-			choix = Console.readInt("Votre choix : ");
-			choix_valide = 0 <= choix
-							&& choix <= this.getNbEntrees();
+			System.out.print("Votre choix : ");
+			choix = extraireEntier(Console.readString());
+			choix_valide = choix != -1;
 			if (!choix_valide) {
 				System.out.println("Le numéro doit être compris entre "
 						+ 0 + " et "
@@ -124,6 +141,19 @@ public class Menu  {
 		} while (!choix_valide);
 
 		this.selection = this.getEntree(choix).getCommande();
+	}
+
+	private int extraireEntier(String s) {
+		try {
+			int choix = Integer.parseInt(s);
+			if(0 <= choix && choix <= this.getNbEntrees())
+				return choix;
+		} catch (NumberFormatException e) {
+			if (raccourcis.containsKey(s))
+				return raccourcis.get(s);
+		}
+
+		return -1;
 	}
 
 	/** Valider la sélection.  Ceci consiste à exécuter la

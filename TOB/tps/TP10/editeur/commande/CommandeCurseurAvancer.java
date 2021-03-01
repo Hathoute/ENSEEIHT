@@ -8,8 +8,8 @@ import editeur.Ligne;
  */
 public class CommandeCurseurAvancer
 	extends CommandeLigne
+	implements CommandeReversible
 {
-
 	/** Initialiser la ligne sur laquelle travaille
 	 * cette commande.
 	 * @param l la ligne
@@ -21,10 +21,15 @@ public class CommandeCurseurAvancer
 
 	public void executer() {
 		ligne.avancer();
+		CommandeAnnulerOperation.ajouterOperation(this);
 	}
 
 	public boolean estExecutable() {
 		return ligne.getCurseur() < ligne.getLongueur();
 	}
 
+	@Override
+	public void annulerCommande() {
+		ligne.reculer();
+	}
 }

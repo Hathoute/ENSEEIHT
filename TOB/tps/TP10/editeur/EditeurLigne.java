@@ -2,6 +2,7 @@ package editeur;
 
 import editeur.commande.*;
 import menu.Menu;
+import menu.SousMenu;
 
 /** Un éditeur pour une ligne de texte.  Les commandes de
  * l'éditeur sont accessibles par un menu.
@@ -28,10 +29,23 @@ public class EditeurLigne {
 		menuPrincipal = new Menu("Menu principal");
 		menuPrincipal.ajouter("Ajouter un texte en fin de ligne",
 					new CommandeAjouterFin(ligne));
-		menuPrincipal.ajouter("Avancer le curseur d'un caractère",
-					new CommandeCurseurAvancer(ligne));
-		menuPrincipal.ajouter("Reculer le curseur d'un caractère",
-					new CommandeCurseurReculer(ligne));
+
+		// Créer un menu du curseur:
+		SousMenu menuCurseur = new SousMenu("Commandes curseur", false);
+		menuCurseur.ajouter("Avancer le curseur d'un caractère", "av",
+				new CommandeCurseurAvancer(ligne));
+		/*menuCurseur.ajouter("Reculer le curseur d'un caractère", "rc",
+				new CommandeCurseurReculer(ligne));
+		menuCurseur.ajouter("Ramener le curseur au debut de la ligne", "db",
+				new CommandeCurseurDebut(ligne));
+		menuCurseur.ajouter("Supprimer le caractère sous le curseur", "dl",
+				new CommandeSupprimerCharactere(ligne));*/
+
+		menuPrincipal.ajouter("Commandes curseur",
+				new CommandeSousMenu(ligne, menuCurseur));
+
+		menuPrincipal.ajouter("Annuler dernière commande",
+				CommandeAnnulerOperation.getInstance());
 	}
 
 	public void editer() {
