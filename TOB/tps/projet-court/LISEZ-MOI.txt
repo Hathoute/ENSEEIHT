@@ -13,7 +13,7 @@ Toutes les durées sont à saisir en heures.  Par exemple, si vous avez passé
 1h45, il faudra indiquer 1.75.  Si vous avez passé 2h30, il faudra indiquer
 2.5.
 
-* Temps passé sur la V1 (en h) : 2 heures 30 minutes
+* Temps passé sur la V1 (en h) : 3 heures 30 minutes
 * Temps passé sur la V2 (en h) : ...
 
 
@@ -24,7 +24,9 @@ Pourquoi l'exception OperationInterditeException ne peut pas être définie
 comme vérifiée par le compilateur ?
 --------------------------------------------------------------------------------
 
-...
+Parceque sinon on doit absolument modifier la classe Allumettes (Jeu) pour qu'elle
+signale qu'on jète une exception de type OperationInterditeException, ce qui est
+contre le principe de la Procuration.
 
 
 --------------------------------------------------------------------------------
@@ -33,7 +35,10 @@ exemple la stratégie lente (C13).  Pour plus de précision, on numérotera
 les étapes à faire.
 --------------------------------------------------------------------------------
 
-...
+Pour ajouter un nouveau type de jeu, on ajoute une classe qui implémente IStrategie,
+on ajoute après l'identifiant dans l'enum Strategie de la classe Jouer en majuscule,
+et enfin on retourne un Objet du type de cette Strategie dans la methode
+creerStrategie de Jouer.java.
 
 
 --------------------------------------------------------------------------------
@@ -41,7 +46,8 @@ Expliquer ce qui permet, dans votre conception, de changer dynamiquement
 (en cours d'exécution du programme) la stratégie d'un joueur (C14).
 --------------------------------------------------------------------------------
 
-...
+Pour changer la strategie d'un joueur, il suffit d'appeler la methode setStrategie
+de la classe Joueur.
 
 
 =====[ Explications ]===========================================================

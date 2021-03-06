@@ -10,6 +10,10 @@ public class Allumettes implements Jeu {
         nombreAllumettes = ALLUMETTES_INITIALES;
     }
 
+    public Allumettes(int allumettesInitiales) {
+        nombreAllumettes = allumettesInitiales;
+    }
+
     @Override
     public int getNombreAllumettes() {
         return nombreAllumettes;

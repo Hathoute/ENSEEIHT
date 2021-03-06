@@ -1,4 +1,7 @@
-package allumettes;
+package allumettes.strategie;
+
+import allumettes.Jeu;
+import allumettes.Joueur;
 
 public class StrategieRapide implements IStrategie {
 

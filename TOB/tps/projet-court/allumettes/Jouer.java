@@ -1,5 +1,7 @@
 package allumettes;
 
+import allumettes.strategie.*;
+
 /** Lance une partie des 13 allumettes en fonction des arguments fournis
  * sur la ligne de commande.
  * @author	Xavier Crégut
@@ -22,16 +24,17 @@ public class Jouer {
 	 */
 	public static void main(String[] args) {
 		try {
-			//TODO: remove!
+			/*//TODO: remove!
 			boolean isDebug = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("-agentlib:jdwp");
 			if (isDebug) {
 				args = "-confiant Xavier@humain Ordinateur@expert".split(" ");
-			}
+			}*/
 
 			verifierNombreArguments(args);
 
 			boolean modeConfiant = false;
-			if (args.length == 3) {
+			int argsModeConfiant = 3;
+			if (args.length == argsModeConfiant) {
 				if (!args[0].equals("-confiant")) {
 					throw new ConfigurationException("Option " + args[0]
 							+ " non reconnue");
@@ -118,4 +121,7 @@ public class Jouer {
 				);
 	}
 
+	public String aaa() {
+		return "";
+	}
 }

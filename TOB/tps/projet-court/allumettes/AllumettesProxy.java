@@ -14,7 +14,7 @@ public class AllumettesProxy implements Jeu {
     }
 
     @Override
-    public void retirer(int nbPrises) throws OperationInterditeException {
+    public void retirer(int nbPrises) {
         throw new OperationInterditeException();
     }
 }
