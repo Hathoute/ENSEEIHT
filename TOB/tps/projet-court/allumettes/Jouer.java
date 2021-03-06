@@ -1,6 +1,11 @@
 package allumettes;
 
-import allumettes.strategie.*;
+import allumettes.strategie.StrategieTricheur;
+import allumettes.strategie.StrategieExpert;
+import allumettes.strategie.StrategieNaive;
+import allumettes.strategie.StrategieRapide;
+import allumettes.strategie.StrategieHumaine;
+import allumettes.strategie.IStrategie;
 
 /** Lance une partie des 13 allumettes en fonction des arguments fournis
  * sur la ligne de commande.
