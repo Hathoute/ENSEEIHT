@@ -14,6 +14,7 @@ import allumettes.strategie.IStrategie;
  */
 public class Jouer {
 
+	private static final int ARGS_MODE_CONFIANT = 3;
 
 	enum Strategie {
 		HUMAIN,
@@ -38,8 +39,7 @@ public class Jouer {
 			verifierNombreArguments(args);
 
 			boolean modeConfiant = false;
-			int argsModeConfiant = 3;
-			if (args.length == argsModeConfiant) {
+			if (args.length == ARGS_MODE_CONFIANT) {
 				if (!args[0].equals("-confiant")) {
 					throw new ConfigurationException("Option " + args[0]
 							+ " non reconnue");
@@ -124,9 +124,5 @@ public class Jouer {
 					   + "Ordinateur@naif"
 				+ "\n"
 				);
-	}
-
-	public String aaa() {
-		return "";
 	}
 }
