@@ -31,4 +31,17 @@ filtrage = @(x, Ns)filtrage_rcos(x, Ns);
 fig_id = 4;
 modulateur
 
+% Efficacité spectrale
+fprintf("--- Efficacités spectales ---\n");
 
+e1 = 6000;
+fprintf("Efficacité spectrale du 1er: %f\n", debit/e1);
+
+e2 = 4000;
+fprintf("Efficacité spectrale du 2ème: %f\n", debit/e2);
+
+e3 = 12000;
+fprintf("Efficacité spectrale du 3ème: %f\n", debit/e3);
+
+e4 = 5000;
+fprintf("Efficacité spectrale du 4ème: %f\n", debit/e4);
