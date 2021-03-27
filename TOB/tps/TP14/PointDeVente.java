@@ -94,7 +94,19 @@ public class PointDeVente {
 	 * @param date la oate où l'on veut connaître le prix
 	 */
 	public int getPrix(Carburant carburant, LocalDateTime date) {
-		return 0;
+		if (!(prix.containsKey(carburant)))
+			return 0;
+
+		int prixCarburant = 0;
+
+		for (LocalDateTime d : prix.get(carburant).keySet()) {
+			if (d.isAfter(date))
+				break;
+
+			prixCarburant = prix.get(carburant).get(d);
+		}
+
+		return prixCarburant;
 	}
 
 }
