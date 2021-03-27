@@ -1,16 +1,16 @@
 package allumettes;
 
-public class Allumettes implements Jeu {
+public class JeuReel implements Jeu {
 
     public static final int ALLUMETTES_INITIALES = 13;
 
     private int nombreAllumettes;
 
-    public Allumettes() {
+    public JeuReel() {
         nombreAllumettes = ALLUMETTES_INITIALES;
     }
 
-    public Allumettes(int allumettesInitiales) {
+    public JeuReel(int allumettesInitiales) {
         nombreAllumettes = allumettesInitiales;
     }
 

@@ -1,10 +1,10 @@
 package allumettes;
 
-public class AllumettesProxy implements Jeu {
+public class JeuProxy implements Jeu {
 
     private final Jeu jeuReel;
 
-    public AllumettesProxy(Jeu jeu) {
+    public JeuProxy(Jeu jeu) {
         this.jeuReel = jeu;
     }
 

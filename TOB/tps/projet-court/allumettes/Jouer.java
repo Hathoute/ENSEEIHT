@@ -16,14 +16,6 @@ public class Jouer {
 
 	private static final int ARGS_MODE_CONFIANT = 3;
 
-	enum Strategie {
-		HUMAIN,
-		NAIF,
-		RAPIDE,
-		EXPERT,
-		TRICHEUR
-	}
-
 	/** Lancer une partie. En argument sont donnés les deux joueurs sous
 	 * la forme nom@stratégie.
 	 * @param args la description des deux joueurs
@@ -50,7 +42,7 @@ public class Jouer {
 
 			Joueur j1 = creerJoueur(args[modeConfiant ? 1 : 0]);
 			Joueur j2 = creerJoueur(args[modeConfiant ? 2 : 1]);
-			Jeu jeu = new Allumettes();
+			Jeu jeu = new JeuReel();
 			Arbitre arbitre = new Arbitre(j1, j2);
 			arbitre.setConfiant(modeConfiant);
 			arbitre.arbitrer(jeu);
@@ -77,26 +69,19 @@ public class Jouer {
 
 	private static IStrategie creerStrategie(String nomStrategie)
 			throws IdentifiantJoueurException {
-		Strategie strategie;
-		try {
-			strategie = Strategie.valueOf(nomStrategie.toUpperCase());
-		} catch (IllegalArgumentException e) {
-			throw new IdentifiantJoueurException("Stratégie Invalide");
-		}
-
-		switch (strategie) {
-			case TRICHEUR:
+		switch (nomStrategie.toUpperCase()) {
+			case "TRICHEUR":
 				return new StrategieTricheur();
-			case EXPERT:
+			case "EXPERT":
 				return new StrategieExpert();
-			case RAPIDE:
+			case "RAPIDE":
 				return new StrategieRapide();
-			case NAIF:
+			case "NAIF":
 				return new StrategieNaive();
-			case HUMAIN:
+			case "HUMAIN":
 				return new StrategieHumaine();
 			default:
-				throw new IdentifiantJoueurException("Stratégie non implémentée");
+				throw new IdentifiantJoueurException("Stratégie Invalide");
 		}
 	}
 

@@ -1,6 +1,6 @@
 package allumettes.tests;
 
-import allumettes.Allumettes;
+import allumettes.JeuReel;
 import allumettes.Jeu;
 import allumettes.Joueur;
 import allumettes.strategie.IStrategie;
@@ -28,19 +28,19 @@ public class StrategieRapideTest {
 
 
     public void testerPriseMax() {
-        Jeu jeu = new Allumettes(Allumettes.PRISE_MAX);
-        assertEquals(Allumettes.PRISE_MAX, strategie.getPrise(joueur, jeu));
+        Jeu jeu = new JeuReel(JeuReel.PRISE_MAX);
+        assertEquals(JeuReel.PRISE_MAX, strategie.getPrise(joueur, jeu));
 
-        jeu = new Allumettes(Allumettes.PRISE_MAX + 1);
-        assertEquals(Allumettes.PRISE_MAX, strategie.getPrise(joueur, jeu));
+        jeu = new JeuReel(JeuReel.PRISE_MAX + 1);
+        assertEquals(JeuReel.PRISE_MAX, strategie.getPrise(joueur, jeu));
 
-        jeu = new Allumettes(2 * Allumettes.PRISE_MAX);
-        assertEquals(Allumettes.PRISE_MAX, strategie.getPrise(joueur, jeu));
+        jeu = new JeuReel(2 * JeuReel.PRISE_MAX);
+        assertEquals(JeuReel.PRISE_MAX, strategie.getPrise(joueur, jeu));
     }
 
     public void testerPriseLimitee() {
-        for (int i = 1; i < Allumettes.PRISE_MAX; i++) {
-            Jeu jeu = new Allumettes(i);
+        for (int i = 1; i < JeuReel.PRISE_MAX; i++) {
+            Jeu jeu = new JeuReel(i);
             assertEquals(i, strategie.getPrise(joueur, jeu));
         }
     }

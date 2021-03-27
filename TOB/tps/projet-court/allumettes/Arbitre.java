@@ -39,7 +39,7 @@ public class Arbitre {
     private boolean jouerTour() {
 
         Joueur joueur = tourJ1 ? j1 : j2;
-        Jeu procuration = estConfiant ? jeu : new AllumettesProxy(jeu);
+        Jeu procuration = estConfiant ? jeu : new JeuProxy(jeu);
         while (true) {
             System.out.println("Nombre d'allumettes restantes : "
                     + jeu.getNombreAllumettes());
