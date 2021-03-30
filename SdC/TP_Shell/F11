@@ -1,0 +1,14 @@
+#!/bin/bash
+
+input=$1
+maxline=0
+linecount=0
+while IFS= read -r line
+do
+  linecount=$(echo "$line" | wc -L)
+  if [ "$maxline" -lt "$linecount" ]
+  then
+    maxline=$linecount
+  fi
+done < "$input"
+echo $maxline
