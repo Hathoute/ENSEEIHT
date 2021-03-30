@@ -5,7 +5,7 @@ import java.util.Collections;
 public class AfficherListe {
 
 	/** Afficher les éléments de liste, un par ligne... */
-	public static void afficher(List<Object> liste) {
+	public static <T> void afficher(List<T> liste) {
 		for (Object o : liste) {
 			System.out.println("  - " + o);
 		}

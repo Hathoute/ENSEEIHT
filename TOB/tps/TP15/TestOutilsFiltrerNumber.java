@@ -15,29 +15,29 @@ public class TestOutilsFiltrerNumber {
 	@Test
 	public void testerNombresHeterogenes() {
 		List<Number> resultats = new ArrayList<>();
-		List<Number> nombres = List.of(1, -2.3, -4, 5.6, 0);
+		List<Number> nombres = new ArrayList<>( Arrays.asList(1, -2.3, -4, 5.6, 0));
 		Outils.filtrer(nombres, estEntier, resultats);
 		assertEquals(2, resultats.size());
-		assertEquals(List.of(1, 5.6), resultats);
+		assertEquals(new ArrayList<>( Arrays.asList(1, 5.6)), resultats);
 	}
 
 
 	@Test
 	public void testerNombresEntiers() {
 		List<Number> resultats = new ArrayList<>();
-		List<Integer> nombres = List.of(1, -2, -4, 5, 0);
+		List<Integer> nombres = new ArrayList<>( Arrays.asList(1, -2, -4, 5, 0));
 		Outils.filtrer(nombres, estEntier, resultats);
 		assertEquals(2, resultats.size());
-		assertEquals(List.of(1, 5), resultats);
+		assertEquals(new ArrayList<>( Arrays.asList(1, 5)), resultats);
 	}
 
 	@Test
 	public void testerNombresEntiersVersObject() {
 		List<Object> resultats = new ArrayList<>();
-		List<Integer> nombres = List.of(1, -2, -4, 5, 0);
+		List<Integer> nombres = new ArrayList<>( Arrays.asList(1, -2, -4, 5, 0));
 		Outils.filtrer(nombres, estEntier, resultats);
 		assertEquals(2, resultats.size());
-		assertEquals(List.of(1, 5), resultats);
+		assertEquals(new ArrayList<>( Arrays.asList(1, 5)), resultats);
 	}
 
 

@@ -12,8 +12,8 @@ public class TestOutilsTousNumber {
 
 	@Before
 	public void setUp() {
-		entiers = List.of(2, -3, 12, -5, 17, 18, 13);
-		reels = List.of(2.01, 0.0003, 12.0, 5.1, 17.5, 1.8, 1.234);
+		entiers = new ArrayList<>( Arrays.asList(2, -3, 12, -5, 17, 18, 13));
+		reels = new ArrayList<>( Arrays.asList(2.01, 0.0003, 12.0, 5.1, 17.5, 1.8, 1.234));
 
 		nonNul = new Critere<Number>() {
 			@Override public boolean satisfaitSur(Number n) {

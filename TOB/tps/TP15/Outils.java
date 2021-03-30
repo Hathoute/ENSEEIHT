@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 /** Quelques outils (méthodes) sur les listes.  */
@@ -5,10 +6,15 @@ public class Outils {
 
 	/** Retourne vrai ssi tous les éléments de la collection respectent le critère. */
 	public static <E> boolean tous(
-			List<E> elements,
+			List<? extends E> elements,
 			Critere<E> critere)
 	{
-		return false;	// TODO à corriger
+		for (E elt : elements) {
+			if (!critere.satisfaitSur(elt))
+				return false;
+		}
+
+		return true;
 	}
 
 
@@ -17,10 +23,13 @@ public class Outils {
 	 */
 	public static <E> void filtrer(
 			List<E> source,
-			Critere<E> aGarder,
-			List<E> resultat)
+			Critere<? super E> aGarder,
+			List<? super E> resultat)
 	{
-		// TODO : à corriger
+		for (E elt : source) {
+			if (aGarder.satisfaitSur(elt))
+				resultat.add(elt);
+		}
 	}
 
 }

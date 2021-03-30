@@ -19,29 +19,29 @@ public class ExempleUnmodifiableList {
 
 		// Afficher la taille de la liste nombres
 		System.out.println("nombres = " + nombres);
-		int taille = XXX_i;		// La taille de nombres
+		int taille = nombres.size();		// La taille de nombres
 
 		System.out.println("taille = " + taille);
 		assert taille >= 0 : "Il faut remplacer le XXX_i :";
 
 		// Afficher la présence de l'élément entier dans la liste nombres
-		boolean est_present = XXX_b;	// entier est-il présent dans nombres ?
+		boolean est_present = nombres.contains(entier);	// entier est-il présent dans nombres ?
 
 		System.out.println(entier + " dans nombres ? " + (est_present ? "oui" : "non"));
 
 		// Afficher la fréquence de entier dans nombres
-		int frequence = XXX_i;	// fréquence de entier dans nombres ?
+		int frequence = (int)nombres.stream().filter(x -> x == entier).count();	// fréquence de entier dans nombres ?
 
 		System.out.println("fréquence de " + entier + " dans nombres ? " + frequence);
 		assert frequence >= 0 : "Il faut remplacer le XXX_i :";
 
 		// Supprimer une fois l'élément entier de nombres
 		System.out.println("suppression de " + entier);
-		TODO();
+		nombres.remove(((Object)entier));
 		System.out.println("nombres = " + nombres);
 
 		// Afficher la taille de la liste nombres
-		int nouvelle_taille = XXX_i;	// La taille de nombres
+		int nouvelle_taille = nombres.size();	// La taille de nombres
 		System.out.println("taille de nombres = " + nouvelle_taille);
 		assert nouvelle_taille >= 0 : "Il faut remplacer le XXX_i :";
 
@@ -50,7 +50,7 @@ public class ExempleUnmodifiableList {
 		}
 
 		// Afficher la présence de l'élément entier dans la liste nombres
-		boolean encore_present = XXX_b;	// entier est-il présent dans nombres ?
+		boolean encore_present = nombres.contains(entier);	// entier est-il présent dans nombres ?
 
 		System.out.println(entier + " dans nombres ? " + (encore_present ? "oui" : "non"));
 		assert  frequence > 1 == encore_present
@@ -58,7 +58,7 @@ public class ExempleUnmodifiableList {
 			: "frequence et/ou encore_present mal définis !";
 
 		// Afficher la fréquence de entier dans nombres
-		int nouvelle_frequence = XXX_i;	// fréquence de entier dans nombres ?
+		int nouvelle_frequence =  (int)nombres.stream().filter(x -> x == entier).count();	// fréquence de entier dans nombres ?
 
 		System.out.println("fréquence de " + entier + " dans nombres ? " + nouvelle_frequence);
 
@@ -105,11 +105,11 @@ public class ExempleUnmodifiableList {
 
 		// Maintenant, on veut être sûr que consulter ne modifiera pas la liste
 		// Comment faire ?  On utlisera Collections.unmodifiableList()
-		TODO();
+		List<Integer> c = Collections.unmodifiableList(mesNombres);
 
 		for (int i : new int[] {4, 0, 2, 7}) {
 			try {
-				consulter(mesNombres, i);
+				consulter(c, i);
 				throw new AssertionError("La liste est modifiable !");
 			} catch (Exception e) {
 				System.out.println("EXCEPTION : " + e);
@@ -119,7 +119,12 @@ public class ExempleUnmodifiableList {
 
 		// Vérifier que les autres opérations de modification de liste ne
 		// peuvent pas être appelées non plus : add, set, etc.
-		TODO();
+		try {
+			c.add(123);
+			c.set(0, 1);
+		} catch (Exception e) {
+			System.out.println("EXEPTION POUR AUTRES OPERATIONS: " + e);
+		}
 	}
 
 	public static void main(String[] args) {

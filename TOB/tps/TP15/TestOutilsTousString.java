@@ -8,7 +8,7 @@ public class TestOutilsTousString {
 
 	@Before
 	public void setUp() {
-		nombres = List.of("un", "deux", "trois", "quatre", "cinq", "six", "sept");
+		nombres = new ArrayList<String>( Arrays.asList("un", "deux", "trois", "quatre", "cinq", "six", "sept") );
 	}
 
 	@Test
