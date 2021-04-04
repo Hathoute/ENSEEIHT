@@ -1,0 +1,28 @@
+#!/bin/bash
+
+cdir=$1
+
+if [[ -v indent ]]
+then
+    let "indent=0"
+else
+    let "indent=indent+1"
+fi
+
+export indent
+
+if [ $1 = "-d" ]
+then
+    cdir=$2
+    for i in "$(ls -p $cdir | grep -v /)"
+    do
+        printf '\t%.0s' {1..$indent}
+        echo $i
+        printf "\n"
+    done
+fi
+
+for i in "$(ls -p $cdir | grep /)"
+do
+    S4 $1 $i
+done

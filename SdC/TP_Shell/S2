@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "Etes-vous satisfait ? (o/n)"
+match=0
+while [ $match -eq 0 ]
+do
+    read resp
+    match=$(expr $resp : \[on\])
+done
