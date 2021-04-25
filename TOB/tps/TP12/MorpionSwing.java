@@ -167,7 +167,7 @@ public class MorpionSwing {
 	}
 
 	public void quitter() {
-
+		Utils.sauvegarderCarte(this.fenetre, (JPanel)this.fenetre.getContentPane().getComponent(0));
 	}
 
 // La méthode principale
@@ -179,6 +179,8 @@ public class MorpionSwing {
 				new MorpionSwing();
 			}
 		});
+
+
 	}
 
 }

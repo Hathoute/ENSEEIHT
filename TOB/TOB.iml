@@ -9,7 +9,8 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/tps/projet-court/allumettes/tests" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/tps/TP15" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/tps/projet-long/GH-1/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/tps/projet-long/GH-1/src/ressources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

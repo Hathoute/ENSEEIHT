@@ -19,3 +19,6 @@ tps/projet-court/evaluations
 
 # Eliminer les tests
 tps/projet-court/tests
+
+# Eliminer le svn du projet long
+tps/projet-long/GH-1/.svn
