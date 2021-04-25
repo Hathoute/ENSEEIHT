@@ -27,6 +27,7 @@ int sz_bg_procs = 4;
 int cur_bg_id = 0;
 
 int cur_fg_pid;
+char *cur_fg_line;
 int fg_finished = false;
 
 char* format_line(char** line) {
@@ -66,29 +67,103 @@ void add_bg_process(int pid, char **line) {
     active_bg_procs++;
     cur_bg_id++;
 }
-void sigchild_handler(int sig) {
-    int codeTerm;
-    pid_t chpid = wait(&codeTerm);
 
+void remove_bg_process(int id) {
+    bg_procs[id].state = NA;
+    active_bg_procs--;
+
+    if(active_bg_procs == 0) {
+        cur_bg_id = 0;
+    }
+}
+
+int get_bgid_from_pid(int pid) {
+    int id = 0;
+    for(id = 0; id < sz_bg_procs; id++) {
+        if (bg_procs[id].pid == pid && bg_procs[id].state != NA) {
+            break;
+        }
+    }
+    
+    return id == sz_bg_procs ? -1 : id;
+}
+
+void on_child_exit(int chpid, int status) {
     if(chpid == cur_fg_pid) {
         fg_finished = true;
         return;
     }
 
-    int id = 0;
-    for(id = 0; id < sz_bg_procs; id++) {
-        if (bg_procs[id].pid == chpid) {
-            break;
-        }
-    }
+    int id = get_bgid_from_pid(chpid);
 
-    if(id == sz_bg_procs) {       
+    if(id == -1) {       
         // Fils d'une commande executée en foreground...
         return;
     }
 
     bg_procs[id].state = FIN;
-    bg_procs[id].done = WIFEXITED(codeTerm) && WEXITSTATUS(codeTerm) == 0;
+    bg_procs[id].done = status == 0;
+}
+
+void on_fg_suspend() {
+    fg_finished = true;
+    char *arg[] = {NULL};
+    add_bg_process(cur_fg_pid, arg);
+    bg_procs[cur_bg_id-1].line = cur_fg_line;
+    bg_procs[cur_bg_id-1].state = SPD;
+    print_proc_info(cur_bg_id-1);
+}
+
+void on_child_suspend(int chpid) {
+    if(chpid == cur_fg_pid) {
+        on_fg_suspend();
+        return;
+    }
+
+    int id = get_bgid_from_pid(chpid);
+
+    if(id == -1) {       
+        // Fils d'une commande executée en foreground...
+        return;
+    }
+
+    bg_procs[id].state = SPD;
+    print_proc_info(id);
+}
+
+void on_child_continue(int chpid) {
+    int id = get_bgid_from_pid(chpid);
+
+    if(id == -1) {       
+        // Fils d'une commande executée en foreground...
+        return;
+    }
+
+    bg_procs[id].state = RUN;
+    print_proc_info(id);
+}
+
+void sigchild_handler(int sig) {
+    int codeTerm;
+    pid_t chpid;
+    do {
+        chpid = waitpid(-1, &codeTerm, WNOHANG|WUNTRACED|WCONTINUED);
+        if(chpid == -1 && errno != ECHILD) {
+            perror("waitpid");
+            exit(EXIT_FAILURE);
+        }
+        else if(chpid > 0) {
+            if(WIFSTOPPED(codeTerm)) {
+                on_child_suspend(chpid);
+            }
+            else if(WIFCONTINUED(codeTerm)) {
+                on_child_continue(chpid);
+            }
+            else if(WIFEXITED(codeTerm)) {
+                on_child_exit(chpid, WEXITSTATUS(codeTerm));
+            }
+        }
+    } while(chpid > 0);
 }
 
 void call_cd(cmdline cmd) {
@@ -132,6 +207,7 @@ void exec_cmd(cmdline cmd) {
 
     fg_finished = false;
     cur_fg_pid = pidFils;
+    cur_fg_line = format_line(cmd.seq[0]);
     while(!fg_finished) {
         sleep(5);
     }
@@ -149,25 +225,72 @@ void show_jobs() {
     }
 }
 
-void stop_proc(char* str_id) {
-    int id = atoi(str_id);
-    if(--id < 0) {
-        printf("stop: job id must be a number > 0\n");
+bool is_valid_proc(int id, const char cmd[], bool suspended) {
+    if(id < 0) {
+        printf("%s: job id must be a number > 0\n", cmd);
+        return false;
     }
 
     if(id >= sz_bg_procs || (bg_procs[id].state != RUN && bg_procs[id].state != SPD)) {
-        printf("stop: job #%i does not exist\n", id+1);
-        return;
+        printf("%s: job [%i] does not exist\n", cmd, id+1);
+        return false;
     }
 
+    if(suspended && bg_procs[id].state != SPD) {
+        printf("%s: job [%i] is not suspended\n", cmd, id+1);
+        return false;
+    }
+
+    return true;
+}
+
+void stop_proc(char* str_id) {
+    int id = atoi(str_id);
+    
+    if (!is_valid_proc(--id, "stop", false)) {
+        return;
+    }
+    
+
     if(bg_procs[id].state == SPD) {
-        printf("stop: job #%i already suspended\n", id+1);
+        printf("stop: job [%i] already suspended\n", id+1);
         return;
     }
 
     kill(bg_procs[id].pid, SIGSTOP);
-    bg_procs[id].state = SPD;
-    printf("pid: %i\n", bg_procs[id].pid);
+    sleep(1);
+}
+
+void move_bg(char* str_id) {
+    int id = atoi(str_id);
+    
+    if(!is_valid_proc(--id, "bg", true)) {
+        return;
+    }
+
+    kill(bg_procs[id].pid, SIGCONT);
+    sleep(1);
+}
+
+void move_fg(char* str_id) {
+    int id = atoi(str_id);
+
+    if(!is_valid_proc(--id, "fg", false)) {
+        return;
+    }
+
+    if(bg_procs[id].state == SPD) {
+        kill(bg_procs[id].pid, SIGCONT);
+    }
+    remove_bg_process(id);
+
+    printf("%s\n", bg_procs[id].line);
+    cur_fg_pid = bg_procs[id].pid;
+    cur_fg_line = bg_procs[id].line;
+    fg_finished = false;
+    while(!fg_finished) {
+        sleep(5);
+    }
 }
 
 void post_exec_cmd() {
@@ -176,13 +299,8 @@ void post_exec_cmd() {
             continue;
         }
         
-        active_bg_procs--;
+        remove_bg_process(i);
         print_proc_info(i);
-        bg_procs[i].state = NA;
-    }
-
-    if(active_bg_procs == 0) {
-        cur_bg_id = 0;
     }
 }
 
@@ -205,6 +323,12 @@ void pre_exec_cmd(cmdline cmd) {
     else if(strcmp(tmp, "stop") == 0) {
         stop_proc(cmd.seq[0][1]);
     }
+    else if(strcmp(tmp, "bg") == 0) {
+        move_bg(cmd.seq[0][1]);
+    }
+    else if(strcmp(tmp, "fg") == 0) {
+        move_fg(cmd.seq[0][1]);
+    }
     else {
         exec_cmd(cmd);
     }
@@ -214,7 +338,6 @@ int main () {
     cmdline *p_cmd;
 
     signal(SIGCHLD, sigchild_handler);
-    signal(SIGSTOP, sigchild_handler);
     bg_procs = malloc(sizeof(bg_proc_data)*sz_bg_procs);
 
     while(1) {
