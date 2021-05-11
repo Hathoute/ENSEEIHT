@@ -1,5 +1,7 @@
 package Jeu;
 
+import Jeu.Modeles.ModeleFichePersonnage;
+import Jeu.Modeles.ModeleMaitreJeu;
 import Jeu.Vues.TexteActionVue;
 
 import javax.swing.*;
@@ -47,9 +49,9 @@ public class  MaitreJeuSwing {
     private final JLabel labelImage = new JLabel();
     private ImageIcon image;
 
-    private final JTextField capacite = new JTextField(6);
-    private final JTextField ajouterInventaire = new JTextField(6);
-    private final JTextField supprimerInventaire = new JTextField(6);
+    private TexteActionVue capacite;
+    private TexteActionVue ajouterInventaire;
+    private TexteActionVue supprimerInventaire;
 
     private final Container contenu21 = new Container();
     private final JLabel contenu22 = new JLabel();
@@ -191,9 +193,12 @@ public class  MaitreJeuSwing {
         contenuBas2.add(boutonCreerFiche);
         contenuBas1.setLayout (new BoxLayout(contenuBas1, BoxLayout.PAGE_AXIS));
 
-        contenuBas1.add(new TexteActionVue("Ajouter une capacité", e -> modifierCapacites()));
-        contenuBas1.add(new TexteActionVue("Ajouter à l'inventaire", e -> modifierInventaire(true)));
-        contenuBas1.add(new TexteActionVue("Supprimer de l'inventaire", e -> modifierInventaire(false)));
+        capacite = new TexteActionVue("Ajouter une capacité", e -> modifierCapacites());
+        ajouterInventaire = new TexteActionVue("Ajouter à l'inventaire", e -> modifierInventaire(true));
+        supprimerInventaire = new TexteActionVue("Supprimer de l'inventaire", e -> modifierInventaire(false));
+        contenuBas1.add(capacite);
+        contenuBas1.add(ajouterInventaire);
+        contenuBas1.add(supprimerInventaire);
     }
 
     private void configurerActions() {
@@ -259,33 +264,27 @@ public class  MaitreJeuSwing {
     }
 
     public void modifierCapacites() {
-        if(!capacite.getText().equals("")){
-            modele.ajouterCapacite(capacite.getText());
+        if(!capacite.getTexte().equals("")){
+            modele.ajouterCapacite(capacite.getTexte());
             contenu21.removeAll(); 
             contenu21.setLayout (new GridLayout(modele.getCapacites().size(),2));
             for(Map.Entry<String,JTextField> e : modele.getCapacites().entrySet()){
                 contenu21.add(new JLabel(e.getKey()));
                 contenu21.add(e.getValue());
             }
+            contenu21.revalidate();
         }
     }
 
 	
     public void modifierInventaire(boolean ajouter){
-        if(!ajouterInventaire.getText().equals("") && ajouter){
-            modele.ajouterInventaire(ajouterInventaire.getText());
+        if(!ajouterInventaire.getTexte().equals("") && ajouter){
+            modele.ajouterInventaire(ajouterInventaire.getTexte());
         }
-        if (!supprimerInventaire.getText().equals("") && !ajouter){
-            modele.supprimerInventaire(supprimerInventaire.getText());
+        if (!supprimerInventaire.getTexte().equals("") && !ajouter){
+            modele.supprimerInventaire(supprimerInventaire.getTexte());
         }
 	    contenu22.setText(modele.getInventaire());
-    }
-
-// La mÃ©thode principale
-// ---------------------
-
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> new MaitreJeuSwing());
     }
 }
 
