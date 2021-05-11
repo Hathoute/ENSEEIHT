@@ -30,6 +30,8 @@ int cur_fg_pid;
 char *cur_fg_line;
 int fg_finished = false;
 
+int last_pipe[2];
+
 char* format_line(char** line) {
     char* fline = malloc(sizeof(char)*1);
     int sz = 1;
@@ -39,7 +41,6 @@ char* format_line(char** line) {
         realloc(fline, sizeof(char)*sz);
         strcat(fline, line[i]);
         strcat(fline, " ");
-        //sprintf(fline, "%s%s ", fline, line[i]);
     }
 
     return fline;
@@ -114,6 +115,10 @@ void on_fg_suspend() {
     print_proc_info(cur_bg_id-1);
 }
 
+void on_fg_killed() {
+    fg_finished = true;
+}
+
 void on_child_suspend(int chpid) {
     if(chpid == cur_fg_pid) {
         on_fg_suspend();
@@ -170,7 +175,13 @@ void sigchild_handler(int sig) {
 }
 
 void sigint_handler(int signo) {
+    if (cur_fg_pid == -1) {
+        return;
+    }
 
+    printf("\n");
+    kill(cur_fg_pid, SIGKILL);
+    on_fg_killed();
 }
 
 void sigtstp_handler(int signo) {
@@ -182,8 +193,7 @@ void sigtstp_handler(int signo) {
     kill(cur_fg_pid, SIGSTOP);
 }
 
-void call_cd(cmdline cmd) {
-    char **line = cmd.seq[0];
+void call_cd(char** line) {
 
     if (line[1] == NULL) {
         return;
@@ -193,16 +203,22 @@ void call_cd(cmdline cmd) {
         return;
     }
     
-    char *arg = cmd.seq[0][1];
+    char *arg = line[1];
     int res = chdir(arg);
     if (res != 0) {
         perror(arg);
-        //return res == ENOTDIR || res == ENOENT;
     }
 }
 
-void exec_cmd(cmdline cmd) {
+void exec_cmd(cmdline cmd, int cmd_id) {
     pid_t pidFils;
+
+    bool last_cmd = cmd.seq[cmd_id+1] == NULL;
+    int pp[2];
+    if(!last_cmd && pipe(pp) == -1) {
+        perror("pipe");
+        return;
+    }
 
     pidFils = fork();
     if (pidFils == -1)  // Anomalie
@@ -215,10 +231,39 @@ void exec_cmd(cmdline cmd) {
         sigaddset(&block_set, SIGINT);
         sigprocmask(SIG_BLOCK, &block_set, NULL);
 
-        execvp(cmd.seq[0][0], cmd.seq[0]);
+        // Input
+        if(cmd_id == 0) {
+            if(cmd.in != NULL) {
+                freopen(cmd.in, "r", stdin);
+            }
+        }
+        else {
+            dup2(last_pipe[0], STDIN_FILENO);
+            close(last_pipe[0]);
+            close(last_pipe[1]);
+        }
+
+        // Output
+        if(last_cmd) {
+            if(cmd.out != NULL) {
+                freopen(cmd.out, "w", stdout);
+            }
+        }
+        else {
+            dup2(pp[1], STDOUT_FILENO);
+            close(pp[0]);
+            close(pp[1]);
+        }
+
+        execvp(cmd.seq[cmd_id][0], cmd.seq[cmd_id]);
         exit(EXIT_FAILURE);
     }
     // Ici on est sur que c'est le parent qui execute.
+
+    close(pp[0]);
+    close(pp[1]);
+    last_pipe[0] = pp[0];
+    last_pipe[1] = pp[1];
 
     if(cmd.backgrounded != NULL) {
         add_bg_process(pidFils, cmd.seq[0]);
@@ -326,32 +371,32 @@ void post_exec_cmd() {
 }
 
 void pre_exec_cmd(cmdline cmd) {
-    if(cmd.seq[0] == NULL) {
-        // Pas de commande...
-        return;
-    }
+    int cmd_id = 0;
+    while(cmd.seq[cmd_id] != NULL) {
+        char* tmp = cmd.seq[cmd_id][0];
+        if (strcmp(tmp, "cd") == 0) {
+            call_cd(cmd.seq[cmd_id]);
+        }
+        else if(strcmp(tmp, "exit") == 0) {
+            exit(EXIT_SUCCESS);
+        }
+        else if(strcmp(tmp, "jobs") == 0) {
+            show_jobs();
+        }
+        else if(strcmp(tmp, "stop") == 0) {
+            stop_proc(cmd.seq[cmd_id][1]);
+        }
+        else if(strcmp(tmp, "bg") == 0) {
+            move_bg(cmd.seq[cmd_id][1]);
+        }
+        else if(strcmp(tmp, "fg") == 0) {
+            move_fg(cmd.seq[cmd_id][1]);
+        }
+        else {
+            exec_cmd(cmd, cmd_id);
+        }
 
-    char* tmp = cmd.seq[0][0];
-    if (strcmp(tmp, "cd") == 0) {
-        call_cd(cmd);
-    }
-    else if(strcmp(tmp, "exit") == 0) {
-        exit(EXIT_SUCCESS);
-    }
-    else if(strcmp(tmp, "jobs") == 0) {
-        show_jobs();
-    }
-    else if(strcmp(tmp, "stop") == 0) {
-        stop_proc(cmd.seq[0][1]);
-    }
-    else if(strcmp(tmp, "bg") == 0) {
-        move_bg(cmd.seq[0][1]);
-    }
-    else if(strcmp(tmp, "fg") == 0) {
-        move_fg(cmd.seq[0][1]);
-    }
-    else {
-        exec_cmd(cmd);
+        cmd_id++;
     }
 }
 
