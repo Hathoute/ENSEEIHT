@@ -1,11 +1,12 @@
 package Jeu;
 
+import Jeu.Modeles.ModeleFichePersonnage;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.util.*;
 
 /** Programmation d’une fiche personnage de  avec une interface graphique Swing.

@@ -1,16 +1,11 @@
 package Jeu.Vues;
 
-import Jeu.Utils;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class TexteActionVue extends Container {
 
-    private Boolean numerique = false;
     private JTextField tfInput;
     private JButton btnOk;
 
@@ -32,5 +27,9 @@ public class TexteActionVue extends Container {
         innerCtr.add(tfInput);
         innerCtr.add(btnOk);
         add(innerCtr);
+    }
+
+    public String getTexte() {
+        return tfInput.getText();
     }
 }

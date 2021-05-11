@@ -1,4 +1,4 @@
-package Jeu;
+package Jeu.Modeles;
 
 import javax.swing.*;
 import java.util.*;
