@@ -1,5 +1,9 @@
 package Jeu.Modeles;
 
+import Jeu.Interfaces.Capacite;
+import Jeu.Interfaces.Inventaire;
+import Jeu.Utils;
+
 import javax.swing.*;
 import java.util.*;
 /**
@@ -13,61 +17,76 @@ public class ModeleFichePersonnage  {
 
 	private String nomPersonnage;
 	private String rolePersonnage;
-	private String viePersonnage;
-	private Map<String,String> listCapacites;
-	private String inventaire;
+	private int viePersonnage;
+	private List<Capacite> capacites;
+	private Inventaire inventaire;
 	private ImageIcon imagePersonnage;
 	
-	public ModeleFichePersonnage(String nom, String role, ImageIcon image, String vie, String leInventaire) {
+	public ModeleFichePersonnage(String nom, String role) {
 		nomPersonnage = nom;
 		rolePersonnage = role;
-		imagePersonnage = image;
-		viePersonnage = vie;
-		inventaire = leInventaire;
-		listCapacites = new HashMap<String,String>();
-		
+		viePersonnage = 10;
+		imagePersonnage = Utils.DEFAULT_ICON;
+		inventaire = new InventaireSimple();
+		capacites = new ArrayList<>();
 	}
-
 
 	public ImageIcon getImage() {
 		return imagePersonnage;
 	}
 
-	public String getInventaire() {
-		
+	public void setImage(ImageIcon icon) {
+		imagePersonnage = icon;
+	}
+
+	public Inventaire getInventaire() {
 		return inventaire;
 	}
 
 	public String getNom() {
-		
 		return nomPersonnage;
 	}
 
+	public void setNom(String nom) {
+		this.nomPersonnage = nom;
+	}
+
 	public String getRole() {
-		
 		return rolePersonnage;
 	}
+
+	public void setRole(String role) {
+		this.rolePersonnage = role;
+	}
 	
-	public String getVie() {
-		
+	public int getVie() {
 		return viePersonnage;
 	}
 
-	
-	public Map<String,String> getCapacites() {
-		return listCapacites;
+	public void setVie(int vie) {
+		this.viePersonnage = vie;
 	}
 
-	public void ajouterCapacite(String capacite, String valeur){
-			listCapacites.put(capacite,valeur);
-		
+	public List<Capacite> getCapacites() {
+		return capacites;
 	}
-	
-	public boolean estEgale(ModeleFichePersonnage autre){
-		return nomPersonnage.equals(autre.getNom()) & rolePersonnage.equals(autre.getRole()) & 
-					viePersonnage.equals(autre.getVie()) &
-				autre.getCapacites().equals(listCapacites) & autre.getInventaire().equals(inventaire);
+
+	public Capacite ajouterCapacite(String capacite) {
+		if (capacites.stream().anyMatch(x -> x.getNom().equals(capacite)))
+			return null;
+
+		Capacite c = new CapaciteSimple(capacite);
+		capacites.add(c);
+		return c;
 	}
-		
+
+	public void reinitialiser() {
+		nomPersonnage = "";
+		rolePersonnage = "";
+		imagePersonnage = Utils.DEFAULT_ICON;
+		viePersonnage = 10;
+		inventaire.clear();
+		capacites.clear();
+	}
 	
 }

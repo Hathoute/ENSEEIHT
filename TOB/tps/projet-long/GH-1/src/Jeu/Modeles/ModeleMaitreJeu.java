@@ -8,6 +8,7 @@ import javax.swing.*;/**
   * @version	$version: 1.0 $
   */
 
+@Deprecated
 public class ModeleMaitreJeu  {
 
 	private Map<String,JTextField> listCapacites;
@@ -16,9 +17,7 @@ public class ModeleMaitreJeu  {
 	public ModeleMaitreJeu() {
 		listCapacites = new HashMap<String,JTextField>();
 		listInventaire = new HashMap<String,Integer>();
-		
 	}
-
 	
 	public String getInventaire() {
 		String inventaire = "";	
@@ -33,9 +32,12 @@ public class ModeleMaitreJeu  {
 				inventaire = inventaire + e.getValue() + "x " + e.getKey()+",";
 			}
 			}
-			
 		}
 		return inventaire;
+	}
+
+	public Map<String,Integer> getInventaireMap() {
+		return listInventaire;
 	}
 
 	public void ajouterInventaire(String inventaire){

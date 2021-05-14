@@ -1,9 +1,12 @@
 package Jeu.Vues;
 
+import Jeu.MaitreJeuSwing;
 import Jeu.Modeles.ModeleFichePersonnage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class MenuListVue extends JScrollPane {
@@ -22,6 +25,9 @@ public class MenuListVue extends JScrollPane {
         setViewportView(panel);
 
         majElements();
+
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setPreferredSize(new Dimension(300, 350));
     }
 
     public void majElements() {
@@ -30,13 +36,13 @@ public class MenuListVue extends JScrollPane {
             panel.add(new MenuItemVue(modele, e -> onModifyPressed(modele), e -> onDeletePressed(modele)));
         }
 
-        if (getParent() != null) {
-            getParent().revalidate();
-        }
+        panel.repaint();
+        panel.revalidate();
     }
 
     private void onModifyPressed(ModeleFichePersonnage modele) {
-        System.out.println("Non implémentée...");
+        MaitreJeuSwing f = new MaitreJeuSwing(modele);
+        f.setOnSaveAction(e -> majElements());
     }
 
     private void onDeletePressed(ModeleFichePersonnage modele) {

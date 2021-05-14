@@ -9,7 +9,6 @@ public class TexteActionVue extends Container {
     private JTextField tfInput;
     private JButton btnOk;
 
-
     public TexteActionVue(String titre, ActionListener action) {
         configurerVues(titre, action);
     }

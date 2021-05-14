@@ -24,11 +24,12 @@ public class MenuSelectionSwing {
         this.fenetre = new JFrame("Menu Principale");
 
         configurerVues();
-
         configurerActions();
 
         this.fenetre.pack();
         this.fenetre.setVisible(true);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.fenetre.setLocation(dim.width/2-this.fenetre.getSize().width/2, dim.height/2-this.fenetre.getSize().height/2);
     }
 
     private void configurerVues() {
@@ -36,35 +37,37 @@ public class MenuSelectionSwing {
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
         listModel = new ArrayList<>();
-        listModel.add(new ModeleFichePersonnage("nom", "role", null, "10", ""));
-        listModel.add(new ModeleFichePersonnage("nom2", "role2", null, "10", ""));
-        listModel.add(new ModeleFichePersonnage("nom3", "role3", null, "10", ""));
-        listModel.add(new ModeleFichePersonnage("nom3", "role3", null, "10", ""));
-        listModel.add(new ModeleFichePersonnage("nom3", "role3", null, "10", ""));
-        listModel.add(new ModeleFichePersonnage("nom3", "role3", null, "10", ""));
+        listModel.add(new ModeleFichePersonnage("Nouveau joueur", ""));
         menuListe = new MenuListVue(listModel);
 
         panel.add(menuListe);
         panel.add(Box.createVerticalStrut(10));
 
         Container ctr = new Container();
-        ctr.setLayout(new GridLayout(1, 2));
+        ctr.setLayout(new BoxLayout(ctr, BoxLayout.LINE_AXIS));
 
         btnAjouter = new JButton("Ajouter");
         btnSauvegarder = new JButton("Sauvegarder");
+        ctr.add(Box.createHorizontalGlue());
         ctr.add(btnAjouter);
+        ctr.add(Box.createHorizontalGlue());
         ctr.add(btnSauvegarder);
+        ctr.add(Box.createHorizontalGlue());
+        ctr.setMaximumSize(new Dimension(100000, btnAjouter.getMaximumSize().height));
         panel.add(ctr);
+        panel.add(Box.createVerticalStrut(10));
 
         fenetre.setContentPane(panel);
+        //fenetre.setPreferredSize(new Dimension(400, 500));
     }
 
     private void configurerActions() {
         btnAjouter.addActionListener(e -> {
-            listModel.add(new ModeleFichePersonnage("Nouveau joueur", "", null, "0", ""));
+            listModel.add(new ModeleFichePersonnage("Nouveau joueur", ""));
             menuListe.majElements();
         });
 
         btnSauvegarder.addActionListener(e -> System.out.println("Non implémentée"));
+        fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }

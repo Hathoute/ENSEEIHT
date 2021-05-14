@@ -15,6 +15,8 @@ import java.nio.file.StandardCopyOption;
 public final class Utils {
 
     public static final int DIMENSION_IMAGE = 128;
+    public static final int DIMENSION_ICON = 32;
+    public static final ImageIcon DEFAULT_ICON = Utils.loadImage(new File("ressources/dauphin-bebou.jpg"));
 
     private static final String RESOURCES_PATH = System.getProperty("java.io.tmpdir")
             + "Jeu-De-Role";
@@ -96,6 +98,11 @@ public final class Utils {
     public static ImageIcon loadImage(File file) {
         Image image = new ImageIcon(file.getAbsolutePath()).getImage();
         Image resImage = image.getScaledInstance(DIMENSION_IMAGE, DIMENSION_IMAGE, Image.SCALE_SMOOTH);
+        return new ImageIcon(resImage);
+    }
+
+    public static ImageIcon getMiniIcon(ImageIcon image) {
+        Image resImage = image.getImage().getScaledInstance(DIMENSION_ICON, DIMENSION_ICON, Image.SCALE_SMOOTH);
         return new ImageIcon(resImage);
     }
     //endregion
