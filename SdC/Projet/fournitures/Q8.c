@@ -39,7 +39,6 @@ char* format_line(char** line) {
         realloc(fline, sizeof(char)*sz);
         strcat(fline, line[i]);
         strcat(fline, " ");
-        //sprintf(fline, "%s%s ", fline, line[i]);
     }
 
     return fline;
@@ -114,6 +113,10 @@ void on_fg_suspend() {
     print_proc_info(cur_bg_id-1);
 }
 
+void on_fg_killed() {
+    fg_finished = true;
+}
+
 void on_child_suspend(int chpid) {
     if(chpid == cur_fg_pid) {
         on_fg_suspend();
@@ -170,7 +173,13 @@ void sigchild_handler(int sig) {
 }
 
 void sigint_handler(int signo) {
+    if (cur_fg_pid == -1) {
+        return;
+    }
 
+    printf("\n");
+    kill(cur_fg_pid, SIGKILL);
+    on_fg_killed();
 }
 
 void sigtstp_handler(int signo) {
@@ -197,7 +206,6 @@ void call_cd(cmdline cmd) {
     int res = chdir(arg);
     if (res != 0) {
         perror(arg);
-        //return res == ENOTDIR || res == ENOENT;
     }
 }
 
@@ -214,6 +222,13 @@ void exec_cmd(cmdline cmd) {
         sigaddset(&block_set, SIGTSTP);
         sigaddset(&block_set, SIGINT);
         sigprocmask(SIG_BLOCK, &block_set, NULL);
+
+        if(cmd.in != NULL) {
+            freopen(cmd.in, "r", stdin);
+        }
+        if(cmd.out != NULL) {
+            freopen(cmd.out, "w", stdout);
+        }
 
         execvp(cmd.seq[0][0], cmd.seq[0]);
         exit(EXIT_FAILURE);
