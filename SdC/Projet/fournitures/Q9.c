@@ -238,9 +238,8 @@ void exec_cmd(cmdline cmd, int cmd_id) {
             }
         }
         else {
+            // STDOUT pipe already closed...
             dup2(last_pipe[0], STDIN_FILENO);
-            close(last_pipe[0]);
-            close(last_pipe[1]);
         }
 
         // Output
@@ -250,18 +249,20 @@ void exec_cmd(cmdline cmd, int cmd_id) {
             }
         }
         else {
-            dup2(pp[1], STDOUT_FILENO);
             close(pp[0]);
-            close(pp[1]);
+            dup2(pp[1], STDOUT_FILENO);
         }
 
         execvp(cmd.seq[cmd_id][0], cmd.seq[cmd_id]);
         exit(EXIT_FAILURE);
     }
     // Ici on est sur que c'est le parent qui execute.
-
-    close(pp[0]);
-    close(pp[1]);
+    if(!last_cmd) {
+        close(pp[1]);
+    }
+    if(cmd_id > 0) {
+        close(last_pipe[0]);
+    }
     last_pipe[0] = pp[0];
     last_pipe[1] = pp[1];
 
