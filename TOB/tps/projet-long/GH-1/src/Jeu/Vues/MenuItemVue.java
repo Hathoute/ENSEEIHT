@@ -33,16 +33,24 @@ public class MenuItemVue extends JPanel {
 
     private void configurerVues() {
         JLabel lblTitre = new JLabel(modele.getNom());
-        lblTitre.setIcon(Utils.getMiniIcon(modele.getImage()));
-        btnAppercue = new JButton("A");
-        btnModifier = new JButton("M");
-        btnSupprimer = new JButton("S");
+        lblTitre.setIcon(Utils.resizeImageIcon(modele.getImage(), Utils.DIMENSION_ICON, Utils.DIMENSION_ICON));
+        btnAppercue = new JButton();
+        btnAppercue.setIcon(Utils.resizeImageIcon(new ImageIcon("ressources/icon_open.png"), 16, 16));
+        btnAppercue.setPreferredSize(new Dimension(32, 32));
+        btnModifier = new JButton();
+        btnModifier.setIcon(Utils.resizeImageIcon(new ImageIcon("ressources/icon_edit.png"), 16, 16));
+        btnModifier.setPreferredSize(new Dimension(32, 32));
+        btnSupprimer = new JButton();
+        btnSupprimer.setIcon(Utils.resizeImageIcon(new ImageIcon("ressources/icon_trash.png"), 16, 16));
+        btnSupprimer.setPreferredSize(new Dimension(32, 32));
 
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         add(lblTitre);
         add(Box.createHorizontalGlue());
         add(btnAppercue);
+        add(Box.createRigidArea(new Dimension(5, 1)));
         add(btnModifier);
+        add(Box.createRigidArea(new Dimension(5, 1)));
         add(btnSupprimer);
     }
 }

@@ -101,8 +101,8 @@ public final class Utils {
         return new ImageIcon(resImage);
     }
 
-    public static ImageIcon getMiniIcon(ImageIcon image) {
-        Image resImage = image.getImage().getScaledInstance(DIMENSION_ICON, DIMENSION_ICON, Image.SCALE_SMOOTH);
+    public static ImageIcon resizeImageIcon(ImageIcon image, int width, int height) {
+        Image resImage = image.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(resImage);
     }
     //endregion
