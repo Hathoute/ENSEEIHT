@@ -22,7 +22,10 @@ int main (int argc, char* argv[]) {
     pipe(p1);
     if (fork() == 0) {
         close(p1[0]);
-        dup2(p1[1], STDOUT_FILENO);
+        if(dup2(p1[1], STDOUT_FILENO) == -1) {
+            perror("dup2");
+            exit(EXIT_FAILURE);
+        }
         execlp("who", "who", NULL);
     }
     
