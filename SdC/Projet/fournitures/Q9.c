@@ -9,7 +9,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#define DEBUG
+//#define DEBUG
 
 // MACROS
 #define IS_RUNNING(bid) bg_procs[bid].state == RUN
