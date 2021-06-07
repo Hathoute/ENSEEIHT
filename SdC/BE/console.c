@@ -21,6 +21,10 @@ Notes :
 #include <fcntl.h>
 #include <sys/stat.h>
 
+#include <stdarg.h>
+
+#define DEBUG
+
 #define TAILLE_MSG 128			/* nb caractères message complet ([nom]+texte) */
 #define TAILLE_NOM 25			/* nombre de caractères d'un pseudo */
 #define NBDESC FD_SETSIZE-1		/* pour le select (macros non definies si >= FD_SETSIZE) */
@@ -30,6 +34,18 @@ Notes :
 									 (hypothèse : pas de caractère de plus de 4 octets) */
 
 char discussion [NB_LIGNES] [TAILLE_MSG]; /* derniers messages reçus */
+
+void dprint(const char *format, ...) {
+#ifdef DEBUG
+	char formated[1024];
+
+	va_list args;
+	va_start(args, format);
+	vsprintf(formated, format, args);
+	printf("**DEBUG**: %s", formated);
+	va_end(args);
+#endif
+}
 
 void afficher(int depart) {
     /* affiche les lignes de discussion[] en commençant par la plus ancienne (départ+1 % nbln)
@@ -59,6 +75,8 @@ int main (int argc, char *argv[]) {
     char saisie [TAILLE_SAISIE]; /* tampon recevant la ligne saisie au clavier */
     char buf [TAILLE_RECEPTION]; /* tampon recevant les messages du tube s2c */
 
+    int code_retour = 0;
+
     if (!((argc == 2) && (strlen(argv[1]) < TAILLE_NOM*sizeof(char)))) {
         printf("utilisation : %s <pseudo>\n", argv[0]);
         printf("Le pseudo ne doit pas dépasser 25 caractères\n");
@@ -66,27 +84,55 @@ int main (int argc, char *argv[]) {
     }
 
     /* ouverture du tube d'écoute */
-    ecoute = open("./ecoute",O_WRONLY);
+    dprint("Opening FIFO...\n");
+    
+    ecoute = open("./ecoute", O_WRONLY | O_NONBLOCK);
     if (ecoute==-1) {
         printf("Le serveur doit être lance, et depuis le meme repertoire que le client\n");
         exit(2);
     }
-    /* (**** à faire ****)  création des tubes de service */
+    
+    dprint("FIFO opened!\n");
+    
+    /* création des tubes de service */
+    strcpy(pseudo, argv[1]);
+    sprintf(tubeC2S, "./%s_c2s", pseudo);
+    sprintf(tubeS2C, "./%s_s2c", pseudo);
+    mkfifo(tubeC2S, S_IRUSR|S_IWUSR);
+    mkfifo(tubeS2C, S_IRUSR|S_IWUSR);
+    sleep(1);
 
-    /* (**** à faire ****) demande de connexion au serveur*/
+    dprint("Attempting connection to server...\n");
+    
+    /* demande de connexion au serveur*/
+    write(ecoute, pseudo, strlen(pseudo)+1);
 
+    dprint("Connected to server!\n");
 
     if (strcmp(pseudo,"fin")!=0) { /* "console fin" provoque la terminaison du serveur */
         /* client "normal" */
 
-    /* (**** à faire ****) initialisations */
+    /* initialisations */
         /* ouverture des tubes de service seulement ici (après la demande de connexion) au serveur)
           car il faut que la connexion au serveur ait eu lieu auparavant, pour que le 
           serveur puisse effectuer l'ouverture des tubes de service de son côté, et ainsi
           permettre au client d'ouvrir les tubes sans être bloqué  (voir sujet, §3.2 )*/
+        dprint("Opening client & server FIFOs...\n");
+        
+        if((S2C = open(tubeS2C, O_RDONLY | O_NONBLOCK)) == -1) {
+            perror("open");
+        }
+        if((C2S = open(tubeC2S, O_WRONLY)) == -1) {
+            perror("open");
+        }
+
+        dprint("client & server opened; s2c = %d, c2s = %d!\n", S2C, C2S);
+        
+        fcntl(S2C, F_SETFL, fcntl(S2C, F_GETFL) | O_NONBLOCK);
+        fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK);
 
         while (strcmp(saisie,"au revoir")!=0) {
-     /* (**** à faire ****) boucle principale  :
+     /* boucle principale  :
             * récupérer les messages reçus éventuels, puis les afficher.
               	- tous les messages comportent TAILLE_MSG caractères, et les constantes
 				  sont fixées pour qu'il n'y ait pas de message tronqué, ce qui serait
@@ -98,9 +144,36 @@ int main (int argc, char *argv[]) {
             	  plus longue que la nouvelle.
             * récupérer la ligne saisie éventuelle, puis l'envoyer
             */
+            FD_ZERO(&readfds);
+            FD_SET(STDIN_FILENO, &readfds);
+            FD_SET(S2C, &readfds);
+            if(select(S2C+1, &readfds, NULL, NULL, NULL) < 0) {
+                perror("select");
+                code_retour = 10;
+                goto terminate;
+		    }
+            if(FD_ISSET(STDIN_FILENO, &readfds)) {
+                bzero(saisie, sizeof(saisie));
+                read(STDIN_FILENO, saisie, sizeof(saisie));
+                saisie[strlen(saisie)-1] = '\0';
+                dprint("Saisie: %s\n", saisie);
+                write(C2S, saisie, strlen(saisie)+1);   
+            }
+            if(FD_ISSET(S2C, &readfds)) {
+                read(S2C, buf, sizeof(buf));
+                dprint("Message reçu: %s\n", buf);
+                strcpy(discussion[curseur], buf);
+                afficher(curseur);
+                curseur++;
+                curseur %= NB_LIGNES;
+            }
         }
     }
-    /* (**** à faire ****) nettoyage des tubes de service */
+    /* nettoyage des tubes de service */
+
+terminate:
+    close(S2C);
+    close(C2S);
     printf("fin client\n");
     exit (0);
 }
