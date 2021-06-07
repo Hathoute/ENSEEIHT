@@ -2,11 +2,10 @@ package Jeu;
 
 import Jeu.Modeles.ModeleFichePersonnage;
 import Jeu.Vues.MenuListVue;
+import de.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +15,15 @@ public class MenuSelectionSwing {
 
     private MenuListVue menuListe;
     private JButton btnAjouter;
+    //private LancerleDe De;
+    private JButton btnLancerDes;
     private JButton btnSauvegarder;
+    private JMenuItem menuOuvrir;
 
     private List<ModeleFichePersonnage> listModel;
 
     public MenuSelectionSwing() {
-        this.fenetre = new JFrame("Menu Principale");
+        this.fenetre = new JFrame("Menu Principal");
 
         configurerVues();
         configurerActions();
@@ -48,14 +50,25 @@ public class MenuSelectionSwing {
 
         btnAjouter = new JButton("Ajouter");
         btnSauvegarder = new JButton("Sauvegarder");
+        btnLancerDes = new JButton("Lancer un dé");
         ctr.add(Box.createHorizontalGlue());
         ctr.add(btnAjouter);
         ctr.add(Box.createHorizontalGlue());
         ctr.add(btnSauvegarder);
         ctr.add(Box.createHorizontalGlue());
+        ctr.add(btnLancerDes);
+        ctr.add(Box.createHorizontalGlue());
+
         ctr.setMaximumSize(new Dimension(100000, btnAjouter.getMaximumSize().height));
         panel.add(ctr);
         panel.add(Box.createVerticalStrut(10));
+
+        JMenuBar mb = new JMenuBar();
+        JMenu menu = new JMenu("Jeu");
+        menuOuvrir = new JMenuItem("Ouvrir");
+        menu.add(menuOuvrir);
+        mb.add(menu);
+        fenetre.setJMenuBar(mb);
 
         fenetre.setContentPane(panel);
         //fenetre.setPreferredSize(new Dimension(400, 500));
@@ -66,8 +79,22 @@ public class MenuSelectionSwing {
             listModel.add(new ModeleFichePersonnage("Nouveau joueur", ""));
             menuListe.majElements();
         });
+        btnSauvegarder.addActionListener(e -> Utils.sauvegarderJeu(fenetre, listModel));
+        btnLancerDes.addActionListener(e -> new DeSwing(new LancerleDe()));
 
-        btnSauvegarder.addActionListener(e -> System.out.println("Non implémentée"));
+        menuOuvrir.addActionListener(e -> chargerJeu());
+
         fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private void chargerJeu() {
+        List<ModeleFichePersonnage> modeles = Utils.chargerJeu(fenetre);
+        if(modeles == null) {
+            return;
+        }
+
+        listModel.clear();
+        listModel.addAll(modeles);
+        menuListe.majElements();
     }
 }

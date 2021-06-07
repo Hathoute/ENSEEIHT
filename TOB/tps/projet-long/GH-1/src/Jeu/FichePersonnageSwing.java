@@ -1,6 +1,7 @@
 package Jeu;
 
 import Jeu.Interfaces.Capacite;
+import Jeu.Interfaces.Statistique;
 import Jeu.Modeles.ModeleFichePersonnage;
 
 import javax.swing.*;
@@ -14,7 +15,6 @@ import java.util.*;
  * Programmation d’une fiche personnage de avec une interface graphique Swing.
  *
  *
- * @author Kamal Hammi
  * @version $Version: 1.0 $
  */
 
@@ -41,6 +41,7 @@ public class FichePersonnageSwing {
 
     /** Image du joueur */
     private final JLabel labelImage = new JLabel();
+    private final Container contenuBas = new Container();
 
     // Le constructeur
     // ---------------
@@ -72,7 +73,7 @@ public class FichePersonnageSwing {
         Container contenu1 = new Container();
         Container contenu2 = new Container();
         Container contenuHaut = new Container();
-        Container contenuBas = new Container();
+        
 
         contenuPrincipale.add(contenuHaut);
         contenuPrincipale.add(Box.createRigidArea(new Dimension(1, 30)));
@@ -150,13 +151,28 @@ public class FichePersonnageSwing {
         panel.setBorder(blackline);
         panel.add(contenu22);
         contenu2.add(panel);
+	
+	
 
         try {
             for (Capacite c : modele.getCapacites()) {
                 contenu21.add(new JLabel(c.getNom() + "  "));
                 contenu21.add(new JLabel(c.getValeur()));
             }
-
+		
+	    if (modele.getNewstatistiques().size() != 0){
+		
+		if (modele.getNewstatistiques().size() % 2 == 1){
+			contenuBas.setLayout(new GridLayout(modele.getNewstatistiques().size()/2+1,2));
+			
+		}else{
+			contenuBas.setLayout(new GridLayout(modele.getNewstatistiques().size()/2,2));
+			
+		}
+		for (Map.Entry<String,?> e : modele.getNewstatistiques().entrySet()){ 
+			creerStatistique(e.getKey());
+		}
+	    }
             // Construire le contrÃ´leur (gestion des Ã©vÃ©nements)
             this.boutonModifierImage.addActionListener(new ActionModifierImage());
             this.boutonImprimerFiche.addActionListener(e -> imprimerFiche());
@@ -170,6 +186,8 @@ public class FichePersonnageSwing {
         } catch (NumberFormatException n) {
             JOptionPane.showMessageDialog(fenetre, "Donnez un entier pour la valeur de la capacité.");
         }
+	
+	
     }
 
     // Quelques rÃ©actions aux interactions de l'utilisateur
@@ -199,5 +217,28 @@ public class FichePersonnageSwing {
 
     public JFrame getfenetre() {
         return fenetre;
+    }
+	
+    public void creerStatistique(String nomSatistique){
+	JLabel newStatistique = new JLabel(nomSatistique,SwingConstants.CENTER);
+        newStatistique.setAlignmentX(Component.CENTER_ALIGNMENT);
+	Container contenuBas1 = new Container();
+	contenuBas.add(contenuBas1); 
+	contenuBas1.setLayout(new GridLayout(2,1));
+        contenuBas1.add(newStatistique);
+	Container contenuStatistique = new Container();
+	Border blacklineStatistique = BorderFactory.createLineBorder(Color.black);
+        JPanel panelStatistique = new JPanel();
+        panelStatistique.setLayout(new FlowLayout());
+        panelStatistique.setBorder(blacklineStatistique);
+        panelStatistique.add(contenuStatistique);
+        contenuBas1.add(panelStatistique);
+        
+        contenuStatistique.setLayout(new GridLayout(modele.getNewstatistiques().get(nomSatistique).size(), 2));
+	for (Statistique s : modele.getNewstatistiques().get(nomSatistique)) {
+                contenuStatistique.add(new JLabel(s.getNom() + "  "));
+                contenuStatistique.add(new JLabel(s.getValeur()));
+            }
+	this.fenetre.pack();
     }
 }

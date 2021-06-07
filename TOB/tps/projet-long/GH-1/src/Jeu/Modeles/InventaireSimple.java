@@ -2,11 +2,11 @@ package Jeu.Modeles;
 
 import Jeu.Interfaces.Inventaire;
 
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-public class InventaireSimple implements Inventaire {
+public class InventaireSimple implements Inventaire, Serializable {
     private Map<String, Integer> inventaire;
 
     public InventaireSimple() {

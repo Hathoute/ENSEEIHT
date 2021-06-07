@@ -1,6 +1,7 @@
 package Jeu;
 
 import Jeu.Interfaces.Capacite;
+import Jeu.Interfaces.Statistique;
 import Jeu.Modeles.ModeleFichePersonnage;
 import Jeu.Vues.TexteActionVue;
 
@@ -16,7 +17,6 @@ import java.util.*;
  * Swing.
  *
  *
- * @author Kamal Hammi
  * @version $Version: 1.0 $
  */
 
@@ -35,6 +35,11 @@ public class MaitreJeuSwing {
     private final JFrame fenetre;
 
     private final Map<Capacite, JTextField> tfCapaciteMap;
+   
+    private final Map<String,Map<Statistique, JTextField>> tfStatistiqueMap;
+    private final Map<String,Container> listContenuStatistiques;
+    private final Map<String,Container> listsousContenuStatistiques;
+    private final Map<String,TexteActionVue> listActionStatistiques;
 
     /** Bouton pour Modifier l'image du joueur */
     private final JButton boutonModifierImage = new JButton("Modifier");
@@ -42,7 +47,10 @@ public class MaitreJeuSwing {
     private final JButton boutonSauvegarder = new JButton("Sauvegarder");
 
     private final JButton boutonReset = new JButton("Réinitialiser");
-
+    
+    private final JButton boutonAjouterStatistique = new JButton("Ajouter une Statistique");
+    private final JButton boutonSupprimerStatistique = new JButton("Supprimer une Statistique");
+    private final JTextField nomStatistique = new JTextField(6);
     private final JTextField nomTexte = new JTextField(6);
     private final JTextField roleTexte = new JTextField(6);
     private final JProgressBar vieValeur = new JProgressBar(0, 100);
@@ -55,6 +63,8 @@ public class MaitreJeuSwing {
 
     private final Container contenu21 = new Container();
     private final Container contenu22 = new Container();
+    private final   Container contenuStatistique = new Container();
+    private final JPanel contenuPrincipale = new JPanel();
     /*
      * private final JButton boutonPlus = new JButton(" + "); private final JButton
      * boutonMoins = new JButton(" - ");
@@ -67,7 +77,10 @@ public class MaitreJeuSwing {
         // Initialiser le modÃ¨le
         this.modele = modele;
         this.tfCapaciteMap = new HashMap<>();
-
+	this.tfStatistiqueMap = new HashMap<>();
+	this.listContenuStatistiques = new HashMap<>();
+	this.listsousContenuStatistiques = new HashMap<>();
+	this.listActionStatistiques = new HashMap<>();
         // Construire la vue (prÃ©sentation)
         // DÃ©finir la fenÃªtre principale
         this.fenetre = new JFrame("Joueur");
@@ -88,8 +101,9 @@ public class MaitreJeuSwing {
         final JLabel vie = new JLabel("Vie");
         final JLabel capacites = new JLabel("Capacités");
         final JLabel inventaire = new JLabel("Inventaire");
+	
 
-        JPanel contenuPrincipale = new JPanel();
+       
         contenuPrincipale.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         this.fenetre.setContentPane(contenuPrincipale);
 
@@ -185,19 +199,46 @@ public class MaitreJeuSwing {
         contenu2.add(panel);
 
         // ContenuBas
-        Container contenuBas1 = new Container();
+      
 
-        contenuBas.setLayout(new BoxLayout(contenuBas, BoxLayout.PAGE_AXIS));
-        contenuBas.add(contenuBas1);
+        //contenuBas.setLayout(new BoxLayout(contenuBas, BoxLayout.PAGE_AXIS));
+	contenuBas.setLayout(new GridLayout(2,1));
+        contenuBas.add(contenuStatistique);
+	if (modele.getNewstatistiques().size() != 0){
+		for (Map.Entry<String,?> e : modele.getNewstatistiques().entrySet()){
+			tfStatistiqueMap.put(e.getKey(),new HashMap<Statistique, JTextField>()); 
+			listsousContenuStatistiques.put(e.getKey(), new Container());
+			listContenuStatistiques.put(e.getKey(), new Container());
+			listActionStatistiques.put(e.getKey(),new TexteActionVue("Ajouter une "+ e.getKey(), f -> modifierStatistiques(e.getKey())));
+			creerStatistique(e.getKey());
+			majStatistiques(e.getKey());
+		}
+		contenuStatistique.revalidate();
+	}
+	
 
         Container contenuBas2 = new Container();
         contenuBas.add(contenuBas2);
 
         // contenuBas2.setLayout (new GridLayout(1,2));
-        contenuBas2.setLayout(new FlowLayout());
-        contenuBas2.add(boutonReset);
-        contenuBas2.add(boutonSauvegarder);
-        contenuBas1.setLayout(new BoxLayout(contenuBas1, BoxLayout.PAGE_AXIS));
+        contenuBas2.setLayout(new BoxLayout(contenuBas2, BoxLayout.PAGE_AXIS));
+	Container contenuBoutons1 = new Container();
+	Container contenuBoutons2 = new Container();
+
+	contenuBoutons1.setLayout(new FlowLayout());
+	contenuBoutons2.setLayout(new FlowLayout());
+
+	contenuBoutons1.add(nomStatistique);
+	contenuBoutons1.add(boutonAjouterStatistique);
+	contenuBoutons1.add(boutonSupprimerStatistique);
+
+        contenuBoutons2.add(boutonReset);
+        contenuBoutons2.add(boutonSauvegarder);
+
+	contenuBas2.add(contenuBoutons1);
+        contenuBas2.add(contenuBoutons2);
+	
+        //contenuBas1.setLayout(new BoxLayout(contenuBas1, BoxLayout.PAGE_AXIS));
 
         /*
          * capacite = new TexteActionVue("Ajouter une capacité", e ->
@@ -213,6 +254,8 @@ public class MaitreJeuSwing {
         // Construire le contrÃ´leur (gestion des Ã©vÃ©nements)
         this.boutonModifierImage.addActionListener(e -> modifierImage());
         this.boutonReset.addActionListener(e -> reinitialiser());
+	this.boutonAjouterStatistique.addActionListener(e -> ajouterStatistique());
+	this.boutonSupprimerStatistique.addActionListener(e -> supprimerStatistique());
         //this.boutonCreerFiche.addActionListener(e -> creerFiche());
 
         this.vieValeur.addMouseListener(new MouseAdapter() {
@@ -249,17 +292,91 @@ public class MaitreJeuSwing {
     public void majVues() {
         contenu22.removeAll();
         contenu21.removeAll();
+	for (Map.Entry<String,Container> e : listsousContenuStatistiques.entrySet()){ 
+		e.getValue().removeAll();
+	}
         nomTexte.setText(modele.getNom());
         roleTexte.setText(modele.getRole());
         vieValeur.setValue(modele.getVie());
         labelImage.setIcon(modele.getImage());
         majCapacites();
         majInventaire();
+	for (Map.Entry<String,Container> e : listsousContenuStatistiques.entrySet()){ 
+		majStatistiques(e.getKey());
+	}
     }
 
     public void reinitialiser() {
         modele.reinitialiser();
         majVues();
+    }
+
+    public void ajouterStatistique() {
+	String LenomStatistique = nomStatistique.getText();
+	modele.ajouterNomStatistique(LenomStatistique);
+	if (!tfStatistiqueMap.containsKey(LenomStatistique)){
+		tfStatistiqueMap.put(LenomStatistique,new HashMap<Statistique, JTextField>());
+		listContenuStatistiques.put(LenomStatistique, new Container());
+		listsousContenuStatistiques.put(LenomStatistique, new Container());
+		listActionStatistiques.put(LenomStatistique,new TexteActionVue("Ajouter une "+ LenomStatistique, f -> 					modifierStatistiques(LenomStatistique)));
+		creerStatistique(LenomStatistique);
+	}
+    }
+
+    public void supprimerStatistique(){
+	String LenomStatistique = nomStatistique.getText();
+	modele.supprimerNomStatistique(LenomStatistique);
+	if (tfStatistiqueMap.containsKey(LenomStatistique)){
+		listContenuStatistiques.clear();
+		listsousContenuStatistiques.clear();
+		for(Map.Entry<String,Map<Statistique,JTextField>> couple : tfStatistiqueMap.entrySet()){
+			for(Statistique s : couple.getValue().keySet()) {
+		            s.setValeur(couple.getValue().get(s).getText());
+		        }
+		}
+		tfStatistiqueMap.clear();
+		contenuStatistique.removeAll();
+		for (Map.Entry<String,?> e : modele.getNewstatistiques().entrySet()){ 
+				tfStatistiqueMap.put(e.getKey(),new HashMap<Statistique, JTextField>()); 
+				listsousContenuStatistiques.put(e.getKey(), new Container());
+				listContenuStatistiques.put(e.getKey(), new Container());
+				listActionStatistiques.put(e.getKey(),new TexteActionVue("Ajouter une "+ e.getKey(), f -> 						modifierStatistiques(e.getKey())));
+				creerStatistique(e.getKey());
+				majStatistiques(e.getKey());
+		}
+		contenuStatistique.revalidate();
+		this.fenetre.pack();
+		
+	}
+    }
+	
+    public void creerStatistique(String nomSatistique){
+	JLabel newStatistique = new JLabel(nomSatistique,SwingConstants.CENTER);
+	Border blacklineStatistique = BorderFactory.createLineBorder(Color.black);
+        JPanel panelStatistique = new JPanel();
+        panelStatistique.setLayout(new FlowLayout());
+        panelStatistique.setBorder(blacklineStatistique);
+        
+        panelStatistique.add(listActionStatistiques.get(nomSatistique));
+        panelStatistique.add(listsousContenuStatistiques.get(nomSatistique));
+        newStatistique.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+	listContenuStatistiques.get(nomSatistique).setLayout(new GridLayout(2,1));
+	listContenuStatistiques.get(nomSatistique).add(newStatistique);
+	listContenuStatistiques.get(nomSatistique).add(panelStatistique);
+
+	if (listContenuStatistiques.size() % 2 == 1){
+		contenuStatistique.setLayout(new GridLayout(listContenuStatistiques.size()/2+1,2));
+		
+	}else{
+		contenuStatistique.setLayout(new GridLayout(listContenuStatistiques.size()/2,2));
+		
+	}
+	contenuStatistique.add(listContenuStatistiques.get(nomSatistique));
+	listContenuStatistiques.get(nomSatistique).revalidate();
+	contenuStatistique.revalidate();
+	this.fenetre.pack();	
+	
     }
 
     /** Modifier l’image du joueur. */
@@ -270,6 +387,33 @@ public class MaitreJeuSwing {
 
         modele.setImage(nouvelleImage);
         labelImage.setIcon(modele.getImage());
+    }
+
+    public void modifierStatistiques(String nom) {
+        if(listActionStatistiques.get(nom).getTexte().equals(""))
+            return;
+
+        if(modele.getNewstatistiques().get(nom).stream().anyMatch(x -> x.getNom().equals(listActionStatistiques.get(nom).getTexte())))
+            return;
+
+        tfStatistiqueMap.get(nom).put(modele.ajouterStatistique(nom,listActionStatistiques.get(nom).getTexte()), new JTextField());
+        majStatistiques(nom);
+    }
+
+    public void majStatistiques(String nom) {
+        listsousContenuStatistiques.get(nom).removeAll();
+        listsousContenuStatistiques.get(nom).setLayout(new GridLayout(modele.getNewstatistiques().get(nom).size(), 2));
+        for (Statistique s : modele.getNewstatistiques().get(nom)) {
+            listsousContenuStatistiques.get(nom).add(new JLabel(s.getNom()));
+            if (!tfStatistiqueMap.get(nom).containsKey(s)) {
+                tfStatistiqueMap.get(nom).put(s, new JTextField());
+                tfStatistiqueMap.get(nom).get(s).setText(s.getValeur());
+            }
+
+            listsousContenuStatistiques.get(nom).add(tfStatistiqueMap.get(nom).get(s));
+        }
+        listsousContenuStatistiques.get(nom).revalidate();
+	this.fenetre.pack();
     }
 
     public void modifierCapacites() {
@@ -296,6 +440,7 @@ public class MaitreJeuSwing {
             contenu21.add(tfCapaciteMap.get(c));
         }
         contenu21.revalidate();
+	this.fenetre.pack();
     }
 
     public void modifierInventaire() { // (boolean ajouter)
@@ -327,6 +472,7 @@ public class MaitreJeuSwing {
             contenu22.add(boutonMoins);
         }
         contenu22.revalidate();
+	this.fenetre.pack();
     }
 
     public void setOnSaveAction(ActionListener actionListener) {
@@ -339,6 +485,11 @@ public class MaitreJeuSwing {
                 for(Capacite c : tfCapaciteMap.keySet()) {
                     c.setValeur(tfCapaciteMap.get(c).getText());
                 }
+		for(Map.Entry<String,Map<Statistique,JTextField>> couple : tfStatistiqueMap.entrySet()){
+			for(Statistique s : couple.getValue().keySet()) {
+		            s.setValeur(couple.getValue().get(s).getText());
+		        }
+		}
                 actionListener.actionPerformed(e);
             }
         });
@@ -366,5 +517,6 @@ public class MaitreJeuSwing {
             }
         }
         contenu22.revalidate();
+	this.fenetre.pack();
     }
 }

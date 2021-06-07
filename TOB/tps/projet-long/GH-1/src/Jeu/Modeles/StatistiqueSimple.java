@@ -1,19 +1,19 @@
 package Jeu.Modeles;
 
 
-import Jeu.Interfaces.Capacite;
+import Jeu.Interfaces.Statistique;
 
 import java.io.Serializable;
 
-public class CapaciteSimple implements Capacite, Serializable {
+public class StatistiqueSimple implements Statistique, Serializable {
     private final String nom;
     private String valeur;
 
-    public CapaciteSimple(String nom) {
+    public StatistiqueSimple(String nom) {
         this(nom,"");
     }
 
-    public CapaciteSimple(String nom, String valeur) {
+    public StatistiqueSimple(String nom, String valeur) {
         this.nom = nom;
         this.valeur = valeur;
     }

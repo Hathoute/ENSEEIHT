@@ -6,7 +6,7 @@ import Jeu.Modeles.InventaireSimple;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-/** Test le fonctionnement de l'inventaire du modèle.
+/** Test le fonctionnement de l'inventaire.
  * @author Basile Gros
  * @version 2eme iteration
 */
@@ -15,7 +15,7 @@ public class InventaireTest{
 	// précision pour les comparaisons réelle
 		public final static double EPSILON = 10e-3;
 		
-		Inventaire inventaire; /*Le modèle dont l'inventaire est testé*/
+		Inventaire inventaire; /*L'inventaire testé*/
 		
 		String objet1 = "Baton"; /*Des objets à ajouter à l'inventaire*/
 		String objet2 = "Caillou";
@@ -72,7 +72,7 @@ public class InventaireTest{
 		assertEquals("",inventaire.toString());
 	}
 	
-	@Test public void testerAjourCaracteresSpeciaux() {
+	@Test public void testerAjoutCaracteresSpeciaux() {
 		String objetSpecial1 = "çè€§$ê£ì";
 		String objetSpecial2 = "Δοκιμή Контрольная работа";
 		inventaire.ajouter(objetSpecial1);

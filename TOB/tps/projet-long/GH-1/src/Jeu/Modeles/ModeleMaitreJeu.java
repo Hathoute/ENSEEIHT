@@ -4,18 +4,18 @@ import java.util.*;
 import javax.swing.*;/**
   * ModeleMaitreJeu est une réalisation de l'iterface du maitre du jeu
   *
-  * @author	Kamal Hammi
   * @version	$version: 1.0 $
   */
 
 @Deprecated
 public class ModeleMaitreJeu  {
-
 	private Map<String,JTextField> listCapacites;
+	private Map<String,Map<String,JTextField>> listStatistiques;
 	private Map<String,Integer> listInventaire;
 	
 	public ModeleMaitreJeu() {
 		listCapacites = new HashMap<String,JTextField>();
+		listStatistiques = new HashMap<String,Map<String,JTextField>>();
 		listInventaire = new HashMap<String,Integer>();
 	}
 	
@@ -53,9 +53,13 @@ public class ModeleMaitreJeu  {
 			listInventaire.put(inventaire,ancien-1);
 		}
 	}
-
+	
 	public Map<String,JTextField> getCapacites() {
 		return listCapacites;
+	}
+
+	public Map<String,Map<String,JTextField>> getNewstatistiques() {
+		return listStatistiques;
 	}
 
 	public void ajouterCapacite(String capacite){
@@ -64,8 +68,29 @@ public class ModeleMaitreJeu  {
 		}
 	}
 
+	public void ajouterStatistique(String nom, String statistique){
+		if(!listStatistiques.get(nom).containsKey(statistique)){
+			listStatistiques.get(nom).put(statistique,new JTextField(6));
+		}
+	}
+
+	public void ajouterNomStatistique(String nom){
+		if(!listStatistiques.containsKey(nom)){
+			listStatistiques.put(nom,new HashMap<String,JTextField>());
+		}
+	}
+
+	public void supprimerNomStatistique(String nom){
+		if(listStatistiques.containsKey(nom)){
+			listStatistiques.remove(nom);
+		}
+	}
+
 	public void reinitialiser() {
 		listCapacites.clear();
 		listInventaire.clear();
+		for(String nom : listStatistiques.keySet()){
+			listStatistiques.get(nom).clear();
+		}
 	}
 }

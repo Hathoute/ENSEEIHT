@@ -1,11 +1,6 @@
 package Jeu.Interfaces;
 
-public interface Capacite {
+public interface Capacite extends Statistique {
 
-    String getNom();
-
-    void setValeur(String valeur);
-
-    String getValeur();
 
 }
