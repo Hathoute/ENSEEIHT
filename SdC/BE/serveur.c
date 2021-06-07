@@ -22,9 +22,9 @@
 
 #include <stdbool.h>
 #include <sys/stat.h>
-#include <stdarg.h>
 
-#define DEBUG
+#include <stdarg.h>
+//#define DEBUG
 
 #define MAXPARTICIPANTS 5		/* seuil au delà duquel la prise en compte de nouvelles
 								 						 	   connexions sera différée */
@@ -127,7 +127,7 @@ void ajouter(char *dep) { // traite la demande de connexion du pseudo référenc
     dprint("Opening %s & %s...\n", c2s, s2c);
 	
 	participants[curcount].out = open(s2c, O_WRONLY);
-    participants[curcount].in = open(c2s, O_RDONLY | O_NONBLOCK);		//hack pour select()
+    participants[curcount].in = open(c2s, O_RDWR | O_NONBLOCK);		//hack pour select()
 	fd_to_id[participants[curcount].in] = curcount;
 	
     dprint("FIFOs opened; in = %d, out = %d!\n", 

@@ -112,7 +112,7 @@ int main (int argc, char *argv[]) {
     signal(SIGALRM, traitant);
     alarm(1);
 
- 	/*  (**** à faire ****)  : 
+ 	/*
  			- couplage et initialisations
  			- boucle : 
  				lire une ligne au clavier, 
@@ -139,11 +139,10 @@ int main (int argc, char *argv[]) {
         strcpy(discussion[0].auteur, argv[2]);
         
         if(strcmp(input, "au revoir") == 0) {
-            exit(10);
+            break;
         }
         traitant(0);
     }
-
 
     close(fdisc);
     exit(0);

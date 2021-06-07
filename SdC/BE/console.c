@@ -22,8 +22,7 @@ Notes :
 #include <sys/stat.h>
 
 #include <stdarg.h>
-
-#define DEBUG
+//#define DEBUG
 
 #define TAILLE_MSG 128			/* nb caractères message complet ([nom]+texte) */
 #define TAILLE_NOM 25			/* nombre de caractères d'un pseudo */
@@ -128,7 +127,6 @@ int main (int argc, char *argv[]) {
 
         dprint("client & server opened; s2c = %d, c2s = %d!\n", S2C, C2S);
         
-        fcntl(S2C, F_SETFL, fcntl(S2C, F_GETFL) | O_NONBLOCK);
         fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK);
 
         while (strcmp(saisie,"au revoir")!=0) {
